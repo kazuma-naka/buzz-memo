@@ -1,9 +1,19 @@
+import { Mynerve } from 'next/font/google';
+
+const mynerve = Mynerve({
+  subsets: ['latin'],
+  weight: '400',
+});
+
 export default function AppDescription() {
   return (
     <section className="mx-auto max-w-5xl px-4 py-20">
       <h2 className="text-center text-3xl font-extrabold tracking-tight md:text-5xl">
-        Buzz Memo で <span className="text-[#5C8DEC]">“Buzz”</span> を
-        ひとまとめ
+        Buzz Memo で{' '}
+        <span className={`text-[#5C8DEC] text-6xl ${mynerve.className}`}>
+          Buzz
+        </span>{' '}
+        をひとまとめ
       </h2>
 
       <p className="mx-auto mt-6 max-w-2xl text-center text-lg/relaxed text-gray-600 dark:text-gray-300">
@@ -16,7 +26,8 @@ export default function AppDescription() {
         <article className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition hover:shadow-md dark:border-gray-700 dark:bg-gray-800">
           <h3 className="text-lg font-semibold">ワンクリック取込</h3>
           <p className="mt-2 text-sm/relaxed text-gray-600 dark:text-gray-300">
-            ブラウザで記事を開いたまま
+            <span className="font-medium">Chrome の拡張機能</span>
+            を使用してブラウザで記事を開いたまま
             <span className="font-medium">1 クリック</span>
             でタイトル・URL・Favicon を保存。
           </p>
