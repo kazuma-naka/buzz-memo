@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { syne, sourceSerif } from '@/lib/fonts';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -13,7 +14,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="ja" className={`${syne.variable} ${sourceSerif.variable}`}>
       <body>{children}</body>
     </html>
   );
