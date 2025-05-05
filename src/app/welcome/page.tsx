@@ -3,6 +3,7 @@ import GoogleSignInButton from '@/components/GoogleSignInButton';
 import WelcomeHero from './_components/WelcomeHero';
 import AppDescription from './_components/AppDescription';
 import Footer from '@/components/Footer';
+import ChromeExtensionButton from '@/components/ChromeExtensionButton';
 
 export default function WelcomePage() {
   return (
@@ -13,7 +14,10 @@ export default function WelcomePage() {
       >
         <Logo />
         <WelcomeHero />
-        <GoogleSignInButton />
+        <div className="flex flex-col md:flex-row gap-4 mt-6">
+          <GoogleSignInButton />
+          <ChromeExtensionButton />
+        </div>
       </header>
       <AppDescription />
       <Footer />
