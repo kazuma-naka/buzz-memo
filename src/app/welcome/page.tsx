@@ -1,6 +1,7 @@
 import Logo from '@/components/Logo';
 import GoogleSignInButton from '@/components/GoogleSignInButton';
 import WelcomeHero from './_components/WelcomeHero';
+import AppDescription from './_components/AppDescription';
 
 export default function WelcomePage() {
   return (
@@ -13,6 +14,7 @@ export default function WelcomePage() {
         <WelcomeHero />
         <GoogleSignInButton />
       </header>
+      <AppDescription />
     </div>
   );
 }
