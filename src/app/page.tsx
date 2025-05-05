@@ -1,5 +1,10 @@
+import { auth } from '@/auth';
 import WelcomePage from './welcome/page';
 
-export default function Home() {
-  return <WelcomePage />;
+export default async function Home() {
+  const session = await auth();
+  if (!session) {
+    return <WelcomePage />;
+  }
+  return <div></div>;
 }
