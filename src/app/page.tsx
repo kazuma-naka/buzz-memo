@@ -9,7 +9,7 @@ export default async function Home() {
   }
   return (
     <div>
-      <Header />
+      <Header title={'Buzz Memo'} />
     </div>
   );
 }

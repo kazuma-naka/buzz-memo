@@ -13,8 +13,8 @@ type HeaderProps = {
 
 export default async function Header({ title }: HeaderProps) {
   const session = await auth();
-  const displayTitle = title ?? 'Buzz Memo';
-  const textSize = title == null ? 'text-5xl' : 'text-2xl';
+  const displayTitle = title ?? '';
+  const textSize = title == null ? 'text-2xl' : 'text-5xl';
 
   return (
     <HeaderTitlte
