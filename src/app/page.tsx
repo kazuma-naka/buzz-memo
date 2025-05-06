@@ -2,6 +2,7 @@ import { auth } from '@/auth';
 import WelcomePage from './welcome/page';
 import Header from '@/components/Header';
 import RegisterServiceButton from './_components/RegisterServiceButton';
+import { createUserIfNotExists } from '@/actions/registerUser';
 
 export default async function Home() {
   const session = await auth();
@@ -9,7 +10,22 @@ export default async function Home() {
     return <WelcomePage />;
   }
   const userId = session.user?.id?.toString();
+  const userName = session.user?.name;
   const userEmail = session.user?.email;
+  const userImage = session.user?.image;
+
+  try {
+    await createUserIfNotExists({
+      userId,
+      userName,
+      userEmail,
+      userImage,
+    });
+    console.log('createUserIfNotExists ran');
+  } catch (err) {
+    console.error('Failed to create user:', err);
+  }
+
   return (
     <div className="bg-[#FAF9F5] min-h-screen flex flex-col">
       <Header title={'Buzz Memo'} />
