@@ -30,10 +30,12 @@ export default function RegisterServiceButton({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <button className="…your trigger styles…">サービスの新規登録</button>
+        <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+          サービスの新規登録
+        </button>
       </DialogTrigger>
 
-      <DialogContent asChild className="…your dialog styles…">
+      <DialogContent className="max-w-md p-6">
         <form
           action={async (formData: FormData) => {
             try {
@@ -84,7 +86,7 @@ export default function RegisterServiceButton({
             </div>
           </div>
 
-          <Button type="submit" className="w-1/2 mx-auto mt-4">
+          <Button type="submit" className="w-full mt-6">
             登録する
           </Button>
         </form>
