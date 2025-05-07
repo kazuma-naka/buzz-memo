@@ -24,7 +24,11 @@ export default async function ServicePage({ params }: Props) {
 
   return (
     <div>
-      <BookmarkGrid bookmarks={bookmarks} editable={idEditable} />
+      <BookmarkGrid
+        bookmarks={bookmarks}
+        editable={idEditable}
+        servicePath={servicePath}
+      />
     </div>
   );
 }
