@@ -1,5 +1,6 @@
 import { fetchBookmarksByService } from '@/actions/fetchBookmarks';
 import fetchServicesByPath from '@/actions/fetchServicesByPath';
+import { isBookmarkEditable } from '@/actions/isBookmarkEditable';
 import { createClient } from '@/lib/supabase/server';
 
 type Props = {
@@ -13,6 +14,10 @@ export default async function ServicePage({ params }: Props) {
   const servicePath = params.service;
   const service = await fetchServicesByPath(servicePath);
   if (!service) return <div>サービスが見つかりませんでした。</div>;
+  if (!session) {
+    return <div>ログインしてください。</div>;
+  }
   const serviceId = service.id;
+  const idEditable = await isBookmarkEditable(session, serviceId);
   const bookmarks = await fetchBookmarksByService(serviceId);
 }
