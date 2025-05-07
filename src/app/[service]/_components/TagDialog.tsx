@@ -29,7 +29,7 @@ export default function TagDialog({
         <h3 className="text-lg font-semibold">タグ</h3>
         <button
           onClick={onClose}
-          className="p-1 hover:bg-gray-200 rounded-full"
+          className="p-1 hover:bg-gray-200 rounded-full hover:cursor-pointer"
           aria-label="閉じる"
         >
           <X className="w-4 h-4 text-gray-600" />
