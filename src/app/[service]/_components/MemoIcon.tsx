@@ -42,7 +42,7 @@ export default function MemoIcon({ onClick }: MemoIconProps) {
       className="group flex items-center p-1 bg-white rounded-full hover:bg-gray-200"
       aria-label="メモを編集"
     >
-      <FileText className="w-5 h-5 text-gray-600 transition-transform group-hover:-translate-x-1" />
+      <FileText className="w-6 h-6 text-gray-600 transition-transform group-hover:-translate-x-1" />
       <span className="hidden group-hover:inline-block ml-1 text-sm text-gray-800 whitespace-nowrap">
         メモを編集
       </span>
