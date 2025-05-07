@@ -1,15 +1,20 @@
-import { auth } from '@/auth';
-import WelcomePage from './welcome/page';
+import { createClient } from '@/lib/supabase/server';
 import Header from '@/components/Header';
 import RegisterServiceButton from './_components/RegisterServiceButton';
+import WelcomePage from './welcome/page';
 
 export default async function Home() {
-  const session = await auth();
+  const {
+    data: { session },
+  } = await (await createClient()).auth.getSession();
   if (!session) {
     return <WelcomePage />;
   }
   const userId = session.user?.id?.toString();
   const userEmail = session.user?.email;
+
+  console.log(`userId: ${userId}`);
+
   return (
     <div className="bg-[#FAF9F5] min-h-screen flex flex-col">
       <Header title={'Buzz Memo'} />

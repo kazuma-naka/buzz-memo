@@ -1,11 +1,21 @@
 'use client';
 
-import { signIn } from 'next-auth/react';
+import { createClient } from '@/lib/supabase/client';
+
+const signInWithGoogle = async () => {
+  const { error } = await createClient().auth.signInWithOAuth({
+    provider: 'google',
+    options: {
+      redirectTo: 'http://localhost:3000/auth/callback',
+    },
+  });
+  if (error) console.error('Error signing in:', error);
+};
 
 export default function GoogleSignInButton() {
   return (
     <button
-      onClick={() => signIn('google', { callbackUrl: '/' })}
+      onClick={signInWithGoogle}
       className="relative inline-block px-10 py-3 text-lg text-[#5C8DEC] font-medium border-4 border-[#5C8DEC] cursor-pointer overflow-hidden z-10 hover:text-white transition-colors duration-300 group rounded-lg"
     >
       <span className="absolute inset-0 bg-transparent z-[-1] border-4 border-[#5C8DEC] rounded-lg" />
