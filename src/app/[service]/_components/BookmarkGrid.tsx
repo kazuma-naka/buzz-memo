@@ -20,7 +20,7 @@ const BookmarkGrid: React.FC<Props> = ({
 }) => {
   const visible = getVisibleBookmarks(bookmarks, editable);
   const sortedBookmarks = sortBookmarksByDate(visible);
-  const groupsBookmarks = groupBookmarksByYearMonth(sortedBookmarks);
+  const groupedBookmarks = groupBookmarksByYearMonth(sortedBookmarks);
 
   if (sortedBookmarks.length === 0)
     return (
@@ -30,20 +30,22 @@ const BookmarkGrid: React.FC<Props> = ({
   return (
     <div className="relative">
       <div className="mx-auto mt-10 max-w-screen-xl space-y-12 px-4">
-        {Object.entries(groupsBookmarks).map(([yearMonth, bookmarks], i) => (
+        {Object.entries(groupedBookmarks).map(([yearMonth, bms]) => (
           <section key={yearMonth}>
             <div data-ym={yearMonth} className="flex justify-center">
               <YearMonthCard label={yearMonth} />
             </div>
-            {bookmarks.map((bm) => (
-              <div key={bm.id} className="mt-6">
+
+            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {bms.map((bm) => (
                 <BookmarkCard
+                  key={bm.id}
                   bookmark={bm}
                   editable={editable}
                   servicePath={servicePath}
                 />
-              </div>
-            ))}
+              ))}
+            </div>
           </section>
         ))}
       </div>

@@ -1,6 +1,5 @@
 'use client';
 
-import router from 'next/router';
 import { useState } from 'react';
 import { motion } from 'motion/react';
 import {
@@ -13,8 +12,8 @@ import {
 import { Bookmark } from '@/types/bookmark';
 import MotionCard from '@/components/MotionCard';
 import { toggleBookmarkVisibility } from '@/actions/updateIsVisibleBookmark';
-import { Edit } from 'lucide-react';
 import { VisibilityToggle } from './VisibilityToggleIcon';
+import { EditBookmarkButton } from './EditBookmarkButton';
 
 interface Props {
   bookmark: Bookmark;
@@ -76,29 +75,7 @@ export const BookmarkCard: React.FC<Props> = ({
         >
           {editable && (
             <div className="absolute top-2 right-2 z-20 flex items-center space-x-2">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  router.push(editHref);
-                }}
-                className="group p-2 bg-white rounded-full hover:bg-gray-200 flex items-center"
-                aria-label="Edit bookmark"
-              >
-                <Edit className="transition-transform group-hover:-translate-x-1 w-6 h-6 text-gray-600" />
-                <span
-                  className="
-                        hidden
-                        group-hover:inline-block
-                        ml-1
-                        text-sm
-                        text-gray-800
-                        whitespace-nowrap
-                        "
-                >
-                  編集する
-                </span>
-              </button>
-
+              <EditBookmarkButton editHref={editHref} />
               <VisibilityToggle
                 isVisible={isVisible}
                 onToggle={toggleVisibility}
