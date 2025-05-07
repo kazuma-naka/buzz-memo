@@ -24,7 +24,10 @@ export default function TagDialog({
   onClose,
 }: TagDialogProps) {
   return (
-    <div className="bg-white rounded-lg w-80 p-4">
+    <div
+      className="bg-white rounded-lg w-80 p-4"
+      onClick={(e) => e.stopPropagation()}
+    >
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-lg font-semibold">タグ</h3>
         <button

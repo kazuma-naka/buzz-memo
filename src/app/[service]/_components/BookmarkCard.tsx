@@ -177,6 +177,7 @@ export const BookmarkCard: React.FC<Props> = ({
 
       {isTagOpen && (
         <div
+          onClick={() => setIsTagOpen(false)}
           className="fixed inset-0 z-50 flex items-center justify-center
                backdrop-blur-md bg-black/20"
         >
