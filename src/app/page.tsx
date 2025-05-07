@@ -24,7 +24,7 @@ export default async function Home() {
         <div className="w-full max-w-lg bg-white rounded-2xl shadow-lg p-8">
           <section className="space-y-6">
             <RegisterServiceButton userId={userId!} userEmail={userEmail!} />
-            <h2 className="text-lg font-bold mb-2">登録したサービス</h2>
+            <h2 className="text-lg font-bold mb-4 mt-4">登録したサービス</h2>
             <RegisteredServiceList services={services} />
           </section>
         </div>
