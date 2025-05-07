@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/card';
 import { Bookmark } from '@/types/bookmark';
 import MotionCard from '@/components/MotionCard';
-import { createClient } from '@/lib/supabase/client';
+import { toggleBookmarkVisibility } from '@/actions/updateIsVisibleBookmark';
 import { Edit } from 'lucide-react';
 import { VisibilityToggle } from './VisibilityToggleIcon';
 
@@ -27,18 +27,18 @@ export const BookmarkCard: React.FC<Props> = ({
   editable = false,
   servicePath = '',
 }) => {
-  const supabase = createClient();
   const editHref = `/${servicePath}/edit/${bookmark.id}`;
   const dateOnly = bookmark.uploaded_date.slice(0, 10);
   const [isVisible, setIsVisible] = useState(bookmark.is_visible);
   const toggleVisibility = async () => {
     const next = !isVisible;
     setIsVisible(next);
-    const { error } = await supabase
-      .from('bookmarks')
-      .update({ is_visible: next })
-      .eq('id', bookmark.id);
-    if (error) setIsVisible(!next);
+    try {
+      await toggleBookmarkVisibility(bookmark.id, next);
+    } catch (err) {
+      console.error(err);
+      setIsVisible(!next);
+    }
   };
   return (
     <>
@@ -58,19 +58,11 @@ export const BookmarkCard: React.FC<Props> = ({
           initial={{ borderColor: 'transparent' }}
           whileHover={{
             borderColor: [
-              '#FFB3BA',
-              '#FFDFBA',
-              '#FFFFBA',
-              '#BAFFC9',
-              '#BAE1FF',
-              '#E0BBE4',
-              '#A0C4FF',
-              '#69A1FF',
-              '#4D75FF',
-              '#3A5EFF',
-              '#ACE7FF',
-              '#BAE1FF',
-              '#FFB3BA',
+              '#0D47A1',
+              '#1976D2',
+              '#42A5F5',
+              '#64B5F6',
+              '#0D47A1',
             ],
             backgroundColor: '#F0EEE6',
             transition: {
@@ -93,10 +85,20 @@ export const BookmarkCard: React.FC<Props> = ({
                 aria-label="Edit bookmark"
               >
                 <Edit className="transition-transform group-hover:-translate-x-1 w-6 h-6 text-gray-600" />
-                <span className="ml-1 text-sm text-gray-800 opacity-0 group-hover:opacity-100 whitespace-nowrap">
+                <span
+                  className="
+                        hidden
+                        group-hover:inline-block
+                        ml-1
+                        text-sm
+                        text-gray-800
+                        whitespace-nowrap
+                        "
+                >
                   編集する
                 </span>
               </button>
+
               <VisibilityToggle
                 isVisible={isVisible}
                 onToggle={toggleVisibility}
