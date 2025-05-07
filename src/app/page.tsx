@@ -2,6 +2,8 @@ import { createClient } from '@/lib/supabase/server';
 import Header from '@/components/Header';
 import RegisterServiceButton from './_components/RegisterServiceButton';
 import WelcomePage from './welcome/page';
+import RegisteredServiceList from './_components/registerd_service_list/RegisteredServiceList';
+import fetchServices from '@/actions/fetchServices';
 
 export default async function Home() {
   const {
@@ -13,7 +15,7 @@ export default async function Home() {
   const userId = session.user?.id?.toString();
   const userEmail = session.user?.email;
 
-  console.log(`userId: ${userId}`);
+  const services = await fetchServices(userId);
 
   return (
     <div className="bg-[#FAF9F5] min-h-screen flex flex-col">
@@ -23,6 +25,7 @@ export default async function Home() {
           <section className="space-y-6">
             <RegisterServiceButton userId={userId!} userEmail={userEmail!} />
             <h2 className="text-lg font-bold mb-2">登録したサービス</h2>
+            <RegisteredServiceList services={services} />
           </section>
         </div>
       </main>
