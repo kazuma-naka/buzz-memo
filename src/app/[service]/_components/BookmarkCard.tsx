@@ -102,7 +102,7 @@ export const BookmarkCard: React.FC<Props> = ({
           style={{ borderStyle: 'solid', backgroundColor: '#FAF9F5' }}
         >
           {editable && (
-            <div className="absolute top-2 right-2 z-20 flex items-center space-x-2">
+            <div className="absolute top-2 right-2 z-20 flex items-center space-x-2 gap-4 mr-4">
               <EditBookmarkButton editHref={editHref} />
               <MemoIcon onClick={() => {}} />
               <TagIcon
@@ -179,7 +179,6 @@ export const BookmarkCard: React.FC<Props> = ({
         <div
           className="fixed inset-0 z-50 flex items-center justify-center
                backdrop-blur-md bg-black/20"
-          onClick={() => setIsTagOpen(false)}
         >
           <TagDialog
             tags={tags}
