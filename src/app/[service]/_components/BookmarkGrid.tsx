@@ -5,13 +5,19 @@ import {
   groupBookmarksByYearMonth,
 } from '@/lib/bookmark';
 import { YearMonthCard } from './YearMonthCard';
+import { BookmarkCard } from './BookmarkCard';
 
 interface Props {
   bookmarks: Bookmark[];
   editable?: boolean;
+  servicePath?: string;
 }
 
-const BookmarkGrid: React.FC<Props> = ({ bookmarks, editable = false }) => {
+const BookmarkGrid: React.FC<Props> = ({
+  bookmarks,
+  editable = false,
+  servicePath,
+}) => {
   const visible = getVisibleBookmarks(bookmarks, editable);
   const sortedBookmarks = sortBookmarksByDate(visible);
   const groupsBookmarks = groupBookmarksByYearMonth(sortedBookmarks);
@@ -29,6 +35,15 @@ const BookmarkGrid: React.FC<Props> = ({ bookmarks, editable = false }) => {
             <div data-ym={yearMonth} className="flex justify-center">
               <YearMonthCard label={yearMonth} />
             </div>
+            {bookmarks.map((bm) => (
+              <div key={bm.id} className="mt-6">
+                <BookmarkCard
+                  bookmark={bm}
+                  editable={editable}
+                  servicePath={servicePath}
+                />
+              </div>
+            ))}
           </section>
         ))}
       </div>
