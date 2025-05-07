@@ -14,6 +14,8 @@ import MotionCard from '@/components/MotionCard';
 import { toggleBookmarkVisibility } from '@/actions/updateIsVisibleBookmark';
 import { VisibilityToggle } from './VisibilityToggleIcon';
 import { EditBookmarkButton } from './EditBookmarkButton';
+import TagIcon from './TagIcon';
+import MemoIcon from './MemoIcon';
 
 interface Props {
   bookmark: Bookmark;
@@ -76,6 +78,8 @@ export const BookmarkCard: React.FC<Props> = ({
           {editable && (
             <div className="absolute top-2 right-2 z-20 flex items-center space-x-2">
               <EditBookmarkButton editHref={editHref} />
+              <TagIcon onClick={() => {}} />
+              <MemoIcon onClick={() => {}} />
               <VisibilityToggle
                 isVisible={isVisible}
                 onToggle={toggleVisibility}
