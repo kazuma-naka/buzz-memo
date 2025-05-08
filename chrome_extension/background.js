@@ -1,4 +1,6 @@
-chrome.runtime.onMessage.addListener((message, sendResponse) => {
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  console.log('Received message:', message);
+
   if (message.type === 'getUserProfile') {
     chrome.identity.getAuthToken({ interactive: true }, async (token) => {
       if (chrome.runtime.lastError || !token) {
@@ -28,6 +30,8 @@ chrome.runtime.onMessage.addListener((message, sendResponse) => {
 });
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  console.log('Tab updated', tabId, changeInfo, tab);
+
   if (
     changeInfo.status === 'complete' &&
     tab.url &&

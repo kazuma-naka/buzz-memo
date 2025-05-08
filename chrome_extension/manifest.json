@@ -13,7 +13,7 @@
         "http://localhost:3000/*"
     ],
     "oauth2": {
-        "client_id": "834143776226-ujcchlqhnp3eatc76al8i9deq826jo3m.apps.googleusercontent.com",
+        "client_id": "834143776226-a0dsfjnd79ehgbb7e8r5km6u7ls5v9ib.apps.googleusercontent.com",
         "scopes": [
             "https://www.googleapis.com/auth/userinfo.email",
             "https://www.googleapis.com/auth/userinfo.profile"

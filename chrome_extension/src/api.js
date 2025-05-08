@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:3000'; // ← 実運用ドメインに差し替えてください
+const API_BASE = 'http://localhost:3000';
 export default class Api {
   constructor(base = API_BASE) {
     this.base = base;
@@ -14,14 +14,17 @@ export default class Api {
   getServices(email) {
     return this._fetch(`/api/getServices?email=${encodeURIComponent(email)}`);
   }
-  isBookmarkSaved(userId, title) {
-    return this._fetch('/api/isBookmarkSaved', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId, title }),
-    })
-      .then((j) => j.saved === true)
-      .catch(() => false);
+  async isBookmarkSaved(userId, title) {
+    try {
+      const j = await this._fetch('/api/isBookmarkSaved', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId, title }),
+      });
+      return j.saved === true;
+    } catch {
+      return false;
+    }
   }
   insertBookmark(data) {
     return this._fetch('/api/insertBookmark', {
