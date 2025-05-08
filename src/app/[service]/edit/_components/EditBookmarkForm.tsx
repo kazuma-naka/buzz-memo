@@ -14,14 +14,16 @@ type Props = {
 
 export default function EditBookmarkForm({ initialData, service }: Props) {
   const [form, setForm] = useState<Bookmark>(initialData);
-  const [loading, setLoading] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   return (
-    <div className="max-w-xl mx-auto p-6">
+    <div className="max-w-xl mx-auto p-6 space-y-6">
       <form
+        id="updateForm"
         action={updateBookmarkByFormData}
-        onSubmit={() => setLoading(true)}
-        className="space-y-6"
+        onSubmit={() => setIsUpdating(true)}
+        className="space-y-4"
       >
         <input type="hidden" name="id" value={form.id} />
         <input type="hidden" name="service" value={service} />
@@ -119,33 +121,40 @@ export default function EditBookmarkForm({ initialData, service }: Props) {
             公開する
           </label>
         </div>
+      </form>
 
-        <div className="flex space-x-4">
+      <div className="flex justify-end gap-4">
+        <button
+          form="updateForm"
+          type="submit"
+          disabled={isUpdating || isDeleting}
+          className="px-4 py-2 bg-[#5C8DEC] text-white rounded hover:opacity-90 transition"
+        >
+          {isUpdating ? '更新中…' : '更新する'}
+        </button>
+
+        <form
+          id="deleteForm"
+          action={deleteBookmarkByFormData}
+          onSubmit={() => setIsDeleting(true)}
+          className="inline-block"
+        >
+          <input type="hidden" name="id" value={form.id} />
+          <input type="hidden" name="service" value={service} />
           <button
             type="submit"
-            disabled={loading}
-            className="px-4 py-2 bg-[#5C8DEC] text-white rounded hover:opacity-90 transition"
-          >
-            {loading ? '更新中…' : '更新する'}
-          </button>
-
-          <button
-            type="submit"
-            formAction={deleteBookmarkByFormData}
-            disabled={loading}
+            disabled={isUpdating || isDeleting}
             onClick={(e) => {
               if (!window.confirm('本当にブックマークを削除しますか？')) {
                 e.preventDefault();
-                return;
               }
-              setLoading(true);
             }}
             className="px-4 py-2 bg-gray-400 text-white rounded hover:opacity-90 transition"
           >
-            {loading ? '削除中…' : '削除する'}
+            {isDeleting ? '削除中…' : '削除する'}
           </button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   );
 }
