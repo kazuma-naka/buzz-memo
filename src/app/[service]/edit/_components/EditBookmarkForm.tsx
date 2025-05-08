@@ -85,7 +85,7 @@ export default function EditBookmarkForm({ initialData, service }: Props) {
         </div>
 
         <div>
-          <label className="block mb-1">Uploaded Date</label>
+          <label className="block mb-1">公開日</label>
           <input
             type="datetime-local"
             name="uploaded_date"
@@ -98,7 +98,7 @@ export default function EditBookmarkForm({ initialData, service }: Props) {
         </div>
 
         <div>
-          <label className="block mb-1">Memo</label>
+          <label className="block mb-1">メモ</label>
           <textarea
             name="memo"
             value={form.memo ?? ''}
@@ -111,6 +111,7 @@ export default function EditBookmarkForm({ initialData, service }: Props) {
           <label className="inline-flex items-center">
             <input
               type="checkbox"
+              value="true"
               name="is_visible"
               checked={form.is_visible}
               onChange={(e) =>
