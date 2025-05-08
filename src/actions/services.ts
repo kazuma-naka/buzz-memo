@@ -1,13 +1,29 @@
 'use server';
 
-import { createClient } from '@/lib/supabase/server';
 import { revalidatePath } from 'next/cache';
+import { createClient } from '@/lib/supabase/server';
+import { RegisterService } from '@/types/registerService';
 
-interface Params {
-  serviceName: string;
-  serviceUrl: string;
-  userId?: string;
-  userEmail: string;
+export async function fetchServices(userId: string) {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from('services')
+    .select('id,title,path')
+    .eq('created_user_id', userId);
+  if (error) throw new Error(error.message);
+  return data;
+}
+
+export async function fetchServicesByPath(servicePath: string) {
+  const supabase = await createClient();
+  const normalizedPath = servicePath.replace(/_/g, ' ');
+  const { data, error } = await supabase
+    .from('services')
+    .select('id,title,path')
+    .eq('path', normalizedPath)
+    .maybeSingle();
+  if (error) throw new Error(error.message);
+  return data;
 }
 
 export async function registerServiceAction({
@@ -15,7 +31,7 @@ export async function registerServiceAction({
   serviceUrl,
   userId,
   userEmail,
-}: Params) {
+}: RegisterService) {
   if (!serviceName.trim() || !serviceUrl.trim()) {
     throw new Error('サービス名とページIDを入力してください。');
   }

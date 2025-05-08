@@ -3,7 +3,7 @@ import Header from '@/components/Header';
 import RegisterServiceButton from './_components/RegisterServiceButton';
 import WelcomePage from './welcome/page';
 import RegisteredServiceList from './_components/registerd_service_list/RegisteredServiceList';
-import fetchServices from '@/actions/fetchServices';
+import { fetchServices } from '@/actions/services';
 
 export default async function Home() {
   const {
