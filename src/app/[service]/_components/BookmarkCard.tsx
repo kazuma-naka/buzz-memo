@@ -53,16 +53,15 @@ export const BookmarkCard: React.FC<Props> = ({
   const [newTag, setNewTag] = useState('');
   const [isTagOpen, setIsTagOpen] = useState(false);
 
-  const handleTagIconClick = async (e: React.MouseEvent) => {
+  const handleTagIconClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    try {
-      const { tagListId, tags } = await fetchTagList(bookmark.id);
-      setTagListId(tagListId);
-      setTags(tags);
-    } catch (err) {
-      console.error('Failed to load tags', err);
-    }
     setIsTagOpen(true);
+    fetchTagList(bookmark.id)
+      .then(({ tagListId, tags }) => {
+        setTagListId(tagListId);
+        setTags(tags);
+      })
+      .catch((err) => console.error(err));
   };
 
   const handleAdd = async () => {
