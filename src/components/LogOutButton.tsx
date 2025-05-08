@@ -1,12 +1,15 @@
 'use client';
 
-import { signOut } from 'next-auth/react';
 import { LogOut } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { createClient } from '@/lib/supabase/client';
+import { useRouter } from 'next/navigation';
 
 const MotionLogOut = motion(LogOut);
 
 export default function LogoutButton() {
+  const router = useRouter();
+
   const buttonVariants = {
     rest: { scale: 1 },
     hover: { scale: 1.05 },
@@ -17,9 +20,18 @@ export default function LogoutButton() {
     hover: { rotate: 90 },
   };
 
+  const handleLogout = async () => {
+    const { error } = await createClient().auth.signOut();
+    if (error) {
+      alert(`エラーが発生しました：${error.message}`);
+    } else {
+      router.push('/');
+    }
+  };
+
   return (
     <motion.button
-      onClick={() => signOut()}
+      onClick={handleLogout}
       className="
         flex items-center gap-2
         text-blue-600 hover:text-blue-800
