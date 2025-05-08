@@ -26,10 +26,10 @@ EXECUTE PROCEDURE update_updated_at_column();
 
 ALTER TABLE public.services ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "サービスの作成者自身がサービスを参照できる"
+CREATE POLICY "公開サービスを誰でも読める"
   ON public.services
   FOR SELECT
-  USING (auth.uid()::text = created_user_id);
+  USING (true);
 
 CREATE POLICY "認証ユーザーは自分のユーザーIDでのみサービスを追加できる"
   ON public.services
