@@ -1,0 +1,22 @@
+{
+  "name": "buzz_memo_chrome_extension",
+  "version": "1.0.0",
+  "description": "Chrome extension for Buzz Memo",
+  "main": "background.js",
+  "scripts": {
+    "build": "esbuild src/index.js --bundle --format=esm --outfile=popup.js --minify"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kazuma-naka/buzz-memo.git"
+  },
+  "author": "Kazuma Naka",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kazuma-naka/buzz-memo/issues"
+  },
+  "homepage": "https://github.com/kazuma-naka/buzz-memo#readme",
+  "dependencies": {
+    "esbuild": "^0.25.4"
+  }
+}
