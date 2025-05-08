@@ -16,7 +16,7 @@ export default async function Header({ title }: HeaderProps) {
     data: { session },
   } = await (await createClient()).auth.getSession();
   const displayTitle = title ?? '';
-  const textSize = title == null ? 'text-2xl' : 'text-5xl';
+  const textSize = title == null ? 'text-2xl' : 'text-2xl';
 
   return (
     <HeaderTitlte

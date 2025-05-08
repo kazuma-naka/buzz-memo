@@ -25,7 +25,7 @@ export default function LogoutButton() {
     if (error) {
       alert(`エラーが発生しました：${error.message}`);
     } else {
-      router.push('/');
+      router.refresh();
     }
   };
 
