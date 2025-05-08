@@ -7,6 +7,7 @@ import {
 import { fetchTagList } from '@/actions/tagList';
 import { YearMonthCard } from './YearMonthCard';
 import { BookmarkCard } from './BookmarkCard';
+import EmptyBookmark from './EmptyBookmark';
 
 interface Props {
   bookmarks: Bookmark[];
@@ -35,10 +36,7 @@ const BookmarkGrid: React.FC<Props> = async ({
   const tagMap: Record<string, { tagListId: string; tags: string[] }> =
     Object.fromEntries(tagEntries);
 
-  if (sortedBookmarks.length === 0)
-    return (
-      <p className="mt-8 text-center text-gray-500">ブックマークはありません</p>
-    );
+  if (sortedBookmarks.length === 0) return <EmptyBookmark />;
 
   return (
     <div className="relative">
