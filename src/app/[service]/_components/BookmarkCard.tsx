@@ -77,7 +77,15 @@ export const BookmarkCard: React.FC<Props> = ({
     setTags((t) => t.filter((x) => x !== tag));
   };
 
-  const [memo, setMemo] = useState<string>(bookmark.memo ?? '');
+  const rawMemo = bookmark.memo ?? '';
+  let parsedMemo: string;
+  try {
+    parsedMemo = JSON.parse(rawMemo);
+  } catch {
+    parsedMemo = rawMemo;
+  }
+
+  const [memo, setMemo] = useState<string>(parsedMemo);
   const [editedMemo, setEditedMemo] = useState<string>(memo);
   const [isMemoOpen, setIsMemoOpen] = useState<boolean>(false);
 
