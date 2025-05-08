@@ -144,11 +144,11 @@ export async function updateBookmarkByFormData(formData: FormData) {
   redirect(`/${service}`);
 }
 
-export async function deleteBookmarkById(id: string, service: string) {
+export async function deleteBookmarkByFormData(formData: FormData) {
+  const id = formData.get('id') as string;
+  const service = formData.get('service') as string;
   const supabase = await createClient();
-
   const { error } = await supabase.from('bookmarks').delete().eq('id', id);
-
   if (error) throw new Error(error.message);
   redirect(`/${service}`);
 }

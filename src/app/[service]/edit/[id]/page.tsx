@@ -1,9 +1,11 @@
 import { fetchBookmarkByBookmarkId } from '@/actions/bookmarks';
+import EditBookmarkForm from '../_components/EditBookmarkForm';
+import { Bookmark } from '@/types/bookmark';
 
 type Params = { service: string; id: string };
 
 export default async function EditBookmarkPage({ params }: { params: Params }) {
-  let bookmark;
+  let bookmark: Bookmark;
   try {
     bookmark = await fetchBookmarkByBookmarkId(params.id);
   } catch (err: any) {
@@ -19,17 +21,9 @@ export default async function EditBookmarkPage({ params }: { params: Params }) {
   }
 
   return (
-    <div className="mt-4 p-6 border rounded-lg shadow-sm">
-      <h2 className="text-2xl font-semibold mb-2">{bookmark.title}</h2>
-      {bookmark.description && <p className="mb-4">{bookmark.description}</p>}
-      <a
-        href={bookmark.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-      >
-        Visit link
-      </a>
+    <div className="mt-4">
+      <h1 className="text-2xl font-semibold mb-4">{bookmark.title}</h1>
+      <EditBookmarkForm initialData={bookmark} service={params.service} />
     </div>
   );
 }
