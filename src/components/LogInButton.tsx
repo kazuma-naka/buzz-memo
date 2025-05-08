@@ -19,14 +19,25 @@ export default function LogInButton() {
 
   const transition = { type: 'spring' as const, stiffness: 300, damping: 20 };
 
+  const handleLogin = async () => {
+    const supabase = createClient();
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+    });
+
+    if (error) {
+      alert(`Error: ${error.message}`);
+      return;
+    }
+
+    if (data?.url) {
+      window.location.href = data.url;
+    }
+  };
+
   return (
     <motion.button
-      onClick={async () => {
-        const { error } = await createClient().auth.signInWithOAuth({
-          provider: 'google',
-        });
-        alert(`${error?.code} ${error?.message}`);
-      }}
+      onClick={handleLogin}
       className="
         flex items-center gap-2
         text-blue-600 hover:text-blue-800
