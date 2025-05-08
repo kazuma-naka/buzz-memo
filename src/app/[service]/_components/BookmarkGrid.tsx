@@ -24,17 +24,19 @@ const BookmarkGrid: React.FC<Props> = async ({
   const sortedBookmarks = sortBookmarksByDate(visibleBookmarks);
   const groupedBookmarks = groupBookmarksByYearMonth(sortedBookmarks);
 
-  const tagEntries = await Promise.all(
-    sortedBookmarks.map(async (bookmark) => {
-      const { tagListId, tags } = await fetchTagList(bookmark.id);
-      return [bookmark.id, { tagListId, tags }] as [
-        string,
-        { tagListId: string; tags: string[] },
-      ];
-    }),
-  );
-  const tagMap: Record<string, { tagListId: string; tags: string[] }> =
-    Object.fromEntries(tagEntries);
+  let tagMap: Record<string, { tagListId: string; tags: string[] }> = {};
+  if (editable) {
+    const tagEntries = await Promise.all(
+      sortedBookmarks.map(async (bookmark) => {
+        const { tagListId, tags } = await fetchTagList(bookmark.id);
+        return [bookmark.id, { tagListId, tags }] as [
+          string,
+          { tagListId: string; tags: string[] },
+        ];
+      }),
+    );
+    tagMap = Object.fromEntries(tagEntries);
+  }
 
   if (sortedBookmarks.length === 0) return <EmptyBookmark />;
 

@@ -20,10 +20,10 @@ CREATE TABLE IF NOT EXISTS public.bookmarks (
 ALTER TABLE public.bookmarks
   ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "ユーザー自身が自分のブックマークを取得できる"
+CREATE POLICY "公開: 全ユーザーがブックマークを参照可能"
   ON public.bookmarks
   FOR SELECT
-    USING (auth.uid()::text = last_updated_user_id);
+  USING (true);
 
 CREATE POLICY "ユーザー自身が自分のブックマークを追加できる"
   ON public.bookmarks
