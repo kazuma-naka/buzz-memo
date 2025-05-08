@@ -1,8 +1,8 @@
 'use client';
 
-import { signIn } from 'next-auth/react';
 import { LogIn } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { createClient } from '@/lib/supabase/client';
 
 const MotionLogIn = motion(LogIn);
 
@@ -21,7 +21,12 @@ export default function LogInButton() {
 
   return (
     <motion.button
-      onClick={() => signIn()}
+      onClick={async () => {
+        const { error } = await createClient().auth.signInWithOAuth({
+          provider: 'google',
+        });
+        alert(`${error?.code} ${error?.message}`);
+      }}
       className="
         flex items-center gap-2
         text-blue-600 hover:text-blue-800

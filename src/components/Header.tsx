@@ -1,6 +1,6 @@
 import { Mynerve } from 'next/font/google';
-import { auth } from '@/auth';
 import HeaderTitlte from './HeaderTitle';
+import { createClient } from '@/lib/supabase/server';
 
 const mynerve = Mynerve({
   subsets: ['latin'],
@@ -12,7 +12,9 @@ type HeaderProps = {
 };
 
 export default async function Header({ title }: HeaderProps) {
-  const session = await auth();
+  const {
+    data: { session },
+  } = await (await createClient()).auth.getSession();
   const displayTitle = title ?? '';
   const textSize = title == null ? 'text-2xl' : 'text-5xl';
 
