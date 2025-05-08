@@ -2,6 +2,7 @@
 
 import { createClient } from '@/lib/supabase/server';
 import type { User } from '@supabase/auth-js';
+import { redirect } from 'next/navigation';
 
 export async function fetchBookmarksByService(serviceId: string): Promise<
   {
@@ -109,4 +110,45 @@ export async function toggleBookmarkVisibility(
   if (error) {
     throw new Error(`Failed to update visibility: ${error.message}`);
   }
+}
+
+export async function updateBookmarkByFormData(formData: FormData) {
+  const supabase = await createClient();
+  const id = formData.get('id') as string;
+  const service = formData.get('service') as string;
+
+  const title = formData.get('title') as string;
+  const description = formData.get('description') as string;
+  const favicon_url = formData.get('favicon_url') as string;
+  const twitter_image_url = formData.get('twitter_image_url') as string;
+  const url = formData.get('url') as string;
+  const uploaded_date = formData.get('uploaded_date') as string;
+  const memo = formData.get('memo') as string;
+  const is_visible = formData.get('is_visible') === 'true';
+
+  const { error } = await supabase
+    .from('bookmarks')
+    .update({
+      title,
+      description,
+      favicon_url,
+      twitter_image_url,
+      url,
+      uploaded_date,
+      memo,
+      is_visible,
+    })
+    .eq('id', id);
+
+  if (error) throw new Error(error.message);
+  redirect(`/${service}`);
+}
+
+export async function deleteBookmarkById(id: string, service: string) {
+  const supabase = await createClient();
+
+  const { error } = await supabase.from('bookmarks').delete().eq('id', id);
+
+  if (error) throw new Error(error.message);
+  redirect(`/${service}`);
 }
