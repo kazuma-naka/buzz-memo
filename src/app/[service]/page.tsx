@@ -10,16 +10,16 @@ type Props = {
 
 export default async function ServicePage({ params }: Props) {
   const {
-    data: { session },
-  } = await (await createClient()).auth.getSession();
+    data: { user },
+  } = await (await createClient()).auth.getUser();
   const servicePath = params.service;
   const service = await fetchServicesByPath(servicePath);
   if (!service) return <div>サービスが見つかりませんでした。</div>;
-  if (!session) {
+  if (!user) {
     return <div>ログインしてください。</div>;
   }
   const serviceId = service.id;
-  const idEditable = await isBookmarkEditable(session, serviceId);
+  const idEditable = await isBookmarkEditable(user, serviceId);
   const bookmarks = await fetchBookmarksByService(serviceId);
 
   return (

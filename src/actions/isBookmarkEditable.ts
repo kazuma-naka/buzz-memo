@@ -1,15 +1,15 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
-import type { Session } from '@supabase/auth-js';
+import type { User } from '@supabase/auth-js';
 
 export async function isBookmarkEditable(
-  session: Session,
+  user: User,
   serviceId: string,
 ): Promise<boolean> {
   const supabase = await createClient();
 
-  const userId = session?.user?.id;
+  const userId = user.id;
   if (!userId) return false;
 
   const { data: inviteListRow } = await supabase

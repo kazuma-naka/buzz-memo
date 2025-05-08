@@ -7,13 +7,13 @@ import fetchServices from '@/actions/fetchServices';
 
 export default async function Home() {
   const {
-    data: { session },
-  } = await (await createClient()).auth.getSession();
-  if (!session) {
+    data: { user },
+  } = await (await createClient()).auth.getUser();
+  if (!user) {
     return <WelcomePage />;
   }
-  const userId = session.user?.id?.toString();
-  const userEmail = session.user?.email;
+  const userId = user.id?.toString();
+  const userEmail = user.email;
 
   const services = await fetchServices(userId);
 
