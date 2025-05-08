@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { registerServiceAction } from '@/actions/registerService';
+import { registerServiceAction } from '@/actions/services';
 import {
   Dialog,
   DialogTrigger,

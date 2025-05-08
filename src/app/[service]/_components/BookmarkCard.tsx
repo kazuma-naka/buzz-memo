@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/card';
 import { Bookmark } from '@/types/bookmark';
 import MotionCard from '@/components/MotionCard';
-import { toggleBookmarkVisibility } from '@/actions/updateIsVisibleBookmark';
+import { toggleBookmarkVisibility } from '@/actions/bookmarks';
 import { fetchTagList, addTag, removeTag } from '@/actions/tagList';
 import { Badge } from '@/components/ui/badge';
 import { VisibilityToggle } from './VisibilityToggleIcon';
@@ -19,7 +19,7 @@ import { EditBookmarkButton } from './EditBookmarkButton';
 import TagIcon from './tag/TagIcon';
 import MemoIcon from './memo/MemoIcon';
 import TagDialog from './tag/TagDialog';
-import { saveBookmarkMemo } from '@/actions/saveBookmarkMemo';
+import { saveBookmarkMemo } from '@/actions/bookmarks';
 import MemoDialog from './memo/MemoDialog';
 
 interface Props {

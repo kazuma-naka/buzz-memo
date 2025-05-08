@@ -1,6 +1,6 @@
-import { fetchBookmarksByService } from '@/actions/fetchBookmarks';
-import fetchServicesByPath from '@/actions/fetchServicesByPath';
-import { isBookmarkEditable } from '@/actions/isBookmarkEditable';
+import { fetchBookmarksByService } from '@/actions/bookmarks';
+import { fetchServicesByPath } from '@/actions/services';
+import { isBookmarkEditable } from '@/actions/bookmarks';
 import { createClient } from '@/lib/supabase/server';
 import BookmarkGrid from './_components/BookmarkGrid';
 import Header from '@/components/Header';
