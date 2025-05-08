@@ -5,14 +5,14 @@ import { createClient } from '@/lib/supabase/server';
 import BookmarkGrid from './_components/BookmarkGrid';
 
 type Props = {
-  params: { service: string };
+  params: Promise<{ service: string }>;
 };
 
 export default async function ServicePage({ params }: Props) {
+  const { service: servicePath } = await params;
   const {
     data: { user },
   } = await (await createClient()).auth.getUser();
-  const servicePath = params.service;
   const service = await fetchServicesByPath(servicePath);
   if (!service) return <div>サービスが見つかりませんでした。</div>;
   if (!user) {
