@@ -16,9 +16,11 @@ import { fetchTagList, addTag, removeTag } from '@/actions/tagList';
 import { Badge } from '@/components/ui/badge';
 import { VisibilityToggle } from './VisibilityToggleIcon';
 import { EditBookmarkButton } from './EditBookmarkButton';
-import TagIcon from './TagIcon';
-import MemoIcon from './MemoIcon';
-import TagDialog from './TagDialog';
+import TagIcon from './tag/TagIcon';
+import MemoIcon from './memo/MemoIcon';
+import TagDialog from './tag/TagDialog';
+import { saveBookmarkMemo } from '@/actions/saveBookmarkMemo';
+import MemoDialog from './memo/MemoDialog';
 
 interface Props {
   bookmark: Bookmark;
@@ -75,6 +77,26 @@ export const BookmarkCard: React.FC<Props> = ({
     setTags((t) => t.filter((x) => x !== tag));
   };
 
+  const [memo, setMemo] = useState<string>(bookmark.memo ?? '');
+  const [editedMemo, setEditedMemo] = useState<string>(memo);
+  const [isMemoOpen, setIsMemoOpen] = useState<boolean>(false);
+
+  const handleMemoIconClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setEditedMemo(memo);
+    setIsMemoOpen(true);
+  };
+
+  const handleSaveMemo = async () => {
+    if (editedMemo.trim() === memo.trim()) {
+      setIsMemoOpen(false);
+      return;
+    }
+    await saveBookmarkMemo(bookmark.id, JSON.stringify(editedMemo));
+    setMemo(editedMemo);
+    setIsMemoOpen(false);
+  };
+
   const editHref = `/${servicePath}/edit/${bookmark.id}`;
   const dateOnly = bookmark.uploaded_date.slice(0, 10);
 
@@ -113,7 +135,7 @@ export const BookmarkCard: React.FC<Props> = ({
           {editable && (
             <div className="absolute top-2 right-2 z-20 flex items-center space-x-2 gap-4 mr-4">
               <EditBookmarkButton editHref={editHref} />
-              <MemoIcon onClick={() => {}} />
+              <MemoIcon onClick={handleMemoIconClick} />
               <TagIcon onClick={handleTagIconClick} />
               <VisibilityToggle
                 isVisible={isVisible}
@@ -205,6 +227,22 @@ export const BookmarkCard: React.FC<Props> = ({
             onAddTag={handleAdd}
             onRemoveTag={handleRemove}
             onClose={() => setIsTagOpen(false)}
+          />
+        </div>
+      )}
+
+      {isMemoOpen && (
+        <div
+          onClick={() => setIsMemoOpen(false)}
+          className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md bg-black/20"
+        >
+          <MemoDialog
+            originalMemo={memo}
+            editedMemo={editedMemo}
+            editable={editable}
+            onChange={setEditedMemo}
+            onSave={handleSaveMemo}
+            onClose={() => setIsMemoOpen(false)}
           />
         </div>
       )}
