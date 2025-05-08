@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import {
   CardContent,
@@ -12,39 +12,76 @@ import {
 import { Bookmark } from '@/types/bookmark';
 import MotionCard from '@/components/MotionCard';
 import { toggleBookmarkVisibility } from '@/actions/updateIsVisibleBookmark';
+import { fetchTagList, addTag, removeTag } from '@/actions/tagList';
+import { Badge } from '@/components/ui/badge';
 import { VisibilityToggle } from './VisibilityToggleIcon';
 import { EditBookmarkButton } from './EditBookmarkButton';
+import TagIcon from './TagIcon';
+import MemoIcon from './MemoIcon';
+import TagDialog from './TagDialog';
 
 interface Props {
   bookmark: Bookmark;
   editable?: boolean;
   servicePath?: string;
+  initialTags: string[];
+  initialTagListId: string;
 }
 
 export const BookmarkCard: React.FC<Props> = ({
   bookmark,
   editable = false,
   servicePath = '',
+  initialTags,
+  initialTagListId,
 }) => {
-  const editHref = `/${servicePath}/edit/${bookmark.id}`;
-  const dateOnly = bookmark.uploaded_date.slice(0, 10);
   const [isVisible, setIsVisible] = useState(bookmark.is_visible);
   const toggleVisibility = async () => {
     const next = !isVisible;
     setIsVisible(next);
     try {
       await toggleBookmarkVisibility(bookmark.id, next);
-    } catch (err) {
-      console.error(err);
-      setIsVisible(!next);
+    } catch {
+      setIsVisible(isVisible);
     }
   };
+
+  const [tags, setTags] = useState<string[]>(initialTags);
+  const [tagListId, setTagListId] = useState<string>(initialTagListId);
+  const [newTag, setNewTag] = useState('');
+  const [isTagOpen, setIsTagOpen] = useState(false);
+
+  const handleTagIconClick = async (e: React.MouseEvent) => {
+    e.stopPropagation();
+    try {
+      const { tagListId, tags } = await fetchTagList(bookmark.id);
+      setTagListId(tagListId);
+      setTags(tags);
+    } catch (err) {
+      console.error('Failed to load tags', err);
+    }
+    setIsTagOpen(true);
+  };
+
+  const handleAdd = async () => {
+    if (!newTag.trim()) return;
+    await addTag(tagListId, newTag.trim());
+    setTags((tag) => [...tag, newTag.trim()]);
+    setNewTag('');
+  };
+
+  const handleRemove = async (tag: string) => {
+    await removeTag(tagListId, tag);
+    setTags((t) => t.filter((x) => x !== tag));
+  };
+
+  const editHref = `/${servicePath}/edit/${bookmark.id}`;
+  const dateOnly = bookmark.uploaded_date.slice(0, 10);
+
   return (
     <>
       <motion.div
-        onClick={() => {
-          window.open(bookmark.url, '_blank');
-        }}
+        onClick={() => window.open(bookmark.url, '_blank')}
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.2 }}
@@ -74,8 +111,10 @@ export const BookmarkCard: React.FC<Props> = ({
           style={{ borderStyle: 'solid', backgroundColor: '#FAF9F5' }}
         >
           {editable && (
-            <div className="absolute top-2 right-2 z-20 flex items-center space-x-2">
+            <div className="absolute top-2 right-2 z-20 flex items-center space-x-2 gap-4 mr-4">
               <EditBookmarkButton editHref={editHref} />
+              <MemoIcon onClick={() => {}} />
+              <TagIcon onClick={handleTagIconClick} />
               <VisibilityToggle
                 isVisible={isVisible}
                 onToggle={toggleVisibility}
@@ -122,7 +161,7 @@ export const BookmarkCard: React.FC<Props> = ({
               />
             )}
 
-            <CardContent className="p-4 pt-2">
+            <CardContent className="p-4 pt-2 ">
               <CardDescription className="text-sm line-clamp-3">
                 {bookmark.description}
               </CardDescription>
@@ -136,9 +175,39 @@ export const BookmarkCard: React.FC<Props> = ({
                 {dateOnly}
               </time>
             </CardFooter>
+
+            {tags.length > 0 && (
+              <div className="px-4 py-2 flex flex-wrap gap-2">
+                {tags.map((tag) => (
+                  <Badge
+                    className="px-4 py-2 bg-[#ffffff] text-[#222222]"
+                    key={tag}
+                  >
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            )}
           </div>
         </MotionCard>
       </motion.div>
+
+      {isTagOpen && (
+        <div
+          onClick={() => setIsTagOpen(false)}
+          className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md bg-black/20"
+        >
+          <TagDialog
+            tags={tags}
+            newTag={newTag}
+            editable={editable}
+            onTagChange={setNewTag}
+            onAddTag={handleAdd}
+            onRemoveTag={handleRemove}
+            onClose={() => setIsTagOpen(false)}
+          />
+        </div>
+      )}
     </>
   );
 };
