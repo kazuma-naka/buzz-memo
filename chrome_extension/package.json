@@ -4,7 +4,7 @@
   "description": "Chrome extension for Buzz Memo",
   "main": "background.js",
   "scripts": {
-    "build": "esbuild popup-src.js --bundle --outfile=popup.js"
+    "build": "esbuild src/index.js --bundle --format=esm --outfile=popup.js --minify"
   },
   "repository": {
     "type": "git",
