@@ -4,7 +4,7 @@ import RegisterServiceButton from './_components/RegisterServiceButton';
 import WelcomePage from './welcome/page';
 import RegisteredServiceList from './_components/registerd_service_list/RegisteredServiceList';
 import { fetchServices } from '@/actions/services';
-import { deleteInvite, getInvites } from '@/actions/invites';
+import { getInvites } from '@/actions/invites';
 import InvitingServicesList from './_components/InvitingServicesList';
 import { InviteWithList } from '@/types/inviteWithList';
 import { BookmarkCheck, UserCheck, UserPlus } from 'lucide-react';
@@ -29,10 +29,6 @@ export default async function Home() {
     (i) => unwraInvitesList(i)?.created_user_id === userId,
   );
 
-  const handleDeleteInvite = async (inviteId: string) => {
-    deleteInvite(inviteId);
-  };
-
   return (
     <div className="bg-[#FAF9F5] min-h-screen flex flex-col">
       <Header title={'バズメモ'} />
@@ -51,11 +47,7 @@ export default async function Home() {
               招待されたサービス
             </h2>
 
-            <InvitedServices
-              invites={invitesReceived}
-              onDeleteInvite={handleDeleteInvite}
-              userId={userId}
-            />
+            <InvitedServices invites={invitesReceived} userId={userId} />
 
             <h2 className="text-lg font-bold mb-2 flex items-center">
               <UserPlus className="mr-2 w-5 h-5 text-green-800" />
@@ -64,7 +56,6 @@ export default async function Home() {
             <InvitingServicesList
               services={services}
               invites={invitesCreated}
-              onDeleteInvite={handleDeleteInvite}
             />
           </section>
         </div>
