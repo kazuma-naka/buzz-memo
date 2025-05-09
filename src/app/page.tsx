@@ -4,6 +4,10 @@ import RegisterServiceButton from './_components/RegisterServiceButton';
 import WelcomePage from './welcome/page';
 import RegisteredServiceList from './_components/registerd_service_list/RegisteredServiceList';
 import { fetchServices } from '@/actions/services';
+import { deleteInvite, getInvites } from '@/actions/invites';
+import InvitingServicesList from './_components/InvitingServicesList';
+import { InviteWithList } from '@/types/inviteWithList';
+import { BookmarkCheck, UserCheck, UserPlus } from 'lucide-react';
 
 export default async function Home() {
   const {
@@ -16,6 +20,17 @@ export default async function Home() {
   const userEmail = user.email;
 
   const services = await fetchServices(userId);
+  const invites = await getInvites();
+  const unwraInvitesList = (inv: InviteWithList) =>
+    Array.isArray(inv.invite_lists) ? inv.invite_lists[0] : inv.invite_lists;
+  const invitesReceived = invites.filter((i) => i.invited_user_id === userId);
+  const invitesCreated = invites.filter(
+    (i) => unwraInvitesList(i)?.created_user_id === userId,
+  );
+
+  const handleDeleteInvite = async (inviteId: string) => {
+    deleteInvite(inviteId);
+  };
 
   return (
     <div className="bg-[#FAF9F5] min-h-screen flex flex-col">
@@ -24,8 +39,26 @@ export default async function Home() {
         <div className="w-full max-w-lg bg-white rounded-2xl shadow-lg p-8">
           <section className="space-y-6">
             <RegisterServiceButton userId={userId!} userEmail={userEmail!} />
-            <h2 className="text-lg font-bold mb-4 mt-4">登録したサービス</h2>
+            <h2 className="text-lg font-bold mb-4 mt-4 flex items-center">
+              <BookmarkCheck className="mr-2 w-5 h-5 text-[#222222]" />
+              登録したサービス
+            </h2>
             <RegisteredServiceList services={services} />
+
+            <h2 className="text-lg font-bold mb-2 flex items-center">
+              <UserCheck className="mr-2 w-5 h-5 text-indigo-800" />
+              招待されたサービス
+            </h2>
+
+            <h2 className="text-lg font-bold mb-2 flex items-center">
+              <UserPlus className="mr-2 w-5 h-5 text-green-800" />
+              招待をしたサービス
+            </h2>
+            <InvitingServicesList
+              services={services}
+              invites={invitesCreated}
+              onDeleteInvite={handleDeleteInvite}
+            />
           </section>
         </div>
       </main>
