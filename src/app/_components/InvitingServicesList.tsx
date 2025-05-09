@@ -66,7 +66,7 @@ export default function InvitingServicesList({
           );
         })
       ) : (
-        <p className="text-gray-500">(招待はありません)</p>
+        <p className="text-gray-500">招待はありません</p>
       )}
     </div>
   );

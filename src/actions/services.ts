@@ -3,6 +3,7 @@
 import { revalidatePath } from 'next/cache';
 import { createClient } from '@/lib/supabase/server';
 import { RegisterService } from '@/types/registerService';
+import { Service } from '@/types/service';
 
 export async function fetchServices(userId: string) {
   const supabase = await createClient();
@@ -12,6 +13,19 @@ export async function fetchServices(userId: string) {
     .eq('created_user_id', userId);
   if (error) throw new Error(error.message);
   return data;
+}
+
+export async function fetchServicesByIdList(ids: string[]): Promise<Service[]> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from('services')
+    .select('id, title, path')
+    .in('id', ids);
+
+  if (error) {
+    throw new Error(`[fetchServices] ${error.message}`);
+  }
+  return data ?? [];
 }
 
 export async function fetchServicesByPath(servicePath: string) {
