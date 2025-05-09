@@ -1,11 +1,5 @@
-import { Mynerve } from 'next/font/google';
 import HeaderTitlte from './HeaderTitle';
 import { createClient } from '@/lib/supabase/server';
-
-const mynerve = Mynerve({
-  subsets: ['latin'],
-  weight: '400',
-});
 
 type HeaderProps = {
   title?: string | null;
@@ -23,7 +17,6 @@ export default async function Header({ title }: HeaderProps) {
       displayTitle={displayTitle}
       textSize={textSize}
       session={!!session}
-      fontClassName={mynerve.className}
     />
   );
 }

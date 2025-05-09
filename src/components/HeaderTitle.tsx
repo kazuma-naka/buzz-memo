@@ -1,26 +1,21 @@
 'use client';
 
 import { ChevronLeft } from 'lucide-react';
-import { motion } from 'motion/react';
-import Link from 'next/link';
 import router from 'next/router';
 import LogoutButton from './LogOutButton';
 import LogInButton from './LogInButton';
+import MotionLink from './MotionLink';
 
 interface HeaderTitleProps {
   displayTitle: string;
   textSize: string;
   session: boolean;
-  fontClassName: string;
 }
-
-const MotionLink = motion(Link);
 
 export default function HeaderTitle({
   displayTitle,
   textSize,
   session,
-  fontClassName,
 }: HeaderTitleProps) {
   return (
     <header className="bg-[#FAF9F5] shadow-lg">
@@ -28,12 +23,10 @@ export default function HeaderTitle({
         {displayTitle !== '' ? (
           <MotionLink
             href="/"
-            className={`${textSize} font-bold text-[#2D2C2B] ${fontClassName}  bg-[linear-gradient(90deg,#0D47A1,#1976D2,#42A5F5,#64B5F6,#0D47A1)]
+            className={`${textSize} font-bold bg-[linear-gradient(90deg,#0D47A1,#1976D2,#42A5F5,#64B5F6,#0D47A1)]
         bg-[length:200%_200%]
         bg-clip-text text-transparent
         select-none
-    
-        /* Animates the gradient background position */
         animate-rainbow`}
             whileHover={{
               scale: 1.1,
@@ -48,7 +41,7 @@ export default function HeaderTitle({
         ) : (
           <ChevronLeft
             size={24}
-            className={`cursor-pointer ${fontClassName}`}
+            className={'cursor-pointer'}
             onClick={() => router.back()}
           />
         )}
