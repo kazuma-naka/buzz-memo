@@ -31,8 +31,6 @@ export default function InvitingServicesList({
 
   return (
     <div>
-      <h2 className="text-lg font-bold mb-2">招待をしたサービス</h2>
-
       {Object.keys(grouped).length > 0 ? (
         Object.entries(grouped).map(([svcId, invList]) => {
           const service = services.find((s) => s.id === svcId);

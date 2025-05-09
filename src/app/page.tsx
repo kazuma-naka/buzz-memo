@@ -4,7 +4,9 @@ import RegisterServiceButton from './_components/RegisterServiceButton';
 import WelcomePage from './welcome/page';
 import RegisteredServiceList from './_components/registerd_service_list/RegisteredServiceList';
 import { fetchServices } from '@/actions/services';
+import { deleteInvite, getInvites } from '@/actions/invites';
 import InvitingServicesList from './_components/InvitingServicesList';
+import { InviteWithList } from '@/types/inviteWithList';
 
 export default async function Home() {
   const {
@@ -17,6 +19,17 @@ export default async function Home() {
   const userEmail = user.email;
 
   const services = await fetchServices(userId);
+  const invites = await getInvites();
+  const unwraInvitesList = (inv: InviteWithList) =>
+    Array.isArray(inv.invite_lists) ? inv.invite_lists[0] : inv.invite_lists;
+  const invitesReceived = invites.filter((i) => i.invited_user_id === userId);
+  const invitesCreated = invites.filter(
+    (i) => unwraInvitesList(i)?.created_user_id === userId,
+  );
+
+  const handleDeleteInvite = async (inviteId: string) => {
+    deleteInvite(inviteId);
+  };
 
   return (
     <div className="bg-[#FAF9F5] min-h-screen flex flex-col">
@@ -27,6 +40,13 @@ export default async function Home() {
             <RegisterServiceButton userId={userId!} userEmail={userEmail!} />
             <h2 className="text-lg font-bold mb-4 mt-4">登録したサービス</h2>
             <RegisteredServiceList services={services} />
+
+            <h2 className="text-lg font-bold mb-2">招待をしたサービス</h2>
+            <InvitingServicesList
+              services={services}
+              invites={invitesCreated}
+              onDeleteInvite={handleDeleteInvite}
+            />
           </section>
         </div>
       </main>
