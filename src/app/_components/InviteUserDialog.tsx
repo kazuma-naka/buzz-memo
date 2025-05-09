@@ -9,7 +9,7 @@ import {
   DialogDescription,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Copy, Paperclip } from 'lucide-react';
+import { Paperclip } from 'lucide-react';
 import { ListItemInviteButton } from '@/app/_components/ListItemButton';
 
 interface InviteUserDialogProps {
@@ -92,7 +92,7 @@ export default function InviteUserDialog({ serviceId }: InviteUserDialogProps) {
           >
             招待する
           </button>
-          <div className="mt-2 flex justify-center">
+          <div className="mt-2 flex justify-end">
             <button
               type="button"
               onClick={handleCopyUrl}
