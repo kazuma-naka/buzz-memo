@@ -19,9 +19,11 @@ export default function RegisteredServiceTitle({
         color: '#91AFBB',
       }}
       transition={{ type: 'spring', stiffness: 300 }}
-      className="inline-block"
+      className="flex-1 min-w-0"
     >
-      <span className="text-xl font-semibold">{service.title}</span>
+      <span className="block text-xl font-semibold truncate">
+        {service.title}
+      </span>
     </MotionLink>
   );
 }
