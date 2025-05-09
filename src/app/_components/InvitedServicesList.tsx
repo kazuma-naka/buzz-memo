@@ -3,18 +3,15 @@ import { Card, CardContent } from '@/components/ui/card';
 import { InviteWithList } from '@/types/inviteWithList';
 import { Service } from '@/types/service';
 import Link from 'next/link';
-import { ListItemDeleteButton } from './ListItemButton';
 
 interface InvitedServicesProps {
   invites: InviteWithList[];
   userId: string;
-  onDeleteInvite: (inviteId: string) => void;
 }
 
 export default async function InvitedServices({
   invites,
   userId,
-  onDeleteInvite,
 }: InvitedServicesProps) {
   const formatStatus = (s: number) =>
     s === 0 ? '処理中' : s === 1 ? '招待済' : s === 2 ? 'キャンセル' : '';
@@ -72,10 +69,6 @@ export default async function InvitedServices({
                     {new Date(inv.expired_at).toLocaleString()}
                   </span>
                 </div>
-                <ListItemDeleteButton
-                  onClick={() => onDeleteInvite(inv.id)}
-                  buttonText="招待削除"
-                />
               </div>
             </CardContent>
           </Card>
