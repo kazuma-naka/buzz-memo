@@ -1,8 +1,10 @@
 'use client';
 
+import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
-import { ListItemDeleteButton, ListItemInviteButton } from '../ListItemButton';
+import { ListItemDeleteButton } from '../ListItemButton';
 import RegisteredServiceTitle from './RegisteredServiceTitle';
+import InviteUserDialog from '@/app/_components/InviteUserDialog';
 import { Service } from '@/types/service';
 
 interface ServiceCardProps {
@@ -10,10 +12,6 @@ interface ServiceCardProps {
 }
 
 export default function ServiceCard({ service }: ServiceCardProps) {
-  const handleInvite = () => {
-    console.log('invite', service.id);
-  };
-
   const handleDelete = () => {
     console.log('delete', service.id);
   };
@@ -24,10 +22,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
         <div className="flex justify-between items-center">
           <RegisteredServiceTitle service={service} />
           <div className="flex gap-4">
-            <ListItemInviteButton
-              onClick={handleInvite}
-              buttonText="招待する"
-            />
+            <InviteUserDialog serviceId={service.id} />
             <ListItemDeleteButton
               onClick={handleDelete}
               buttonText="削除する"
