@@ -9,7 +9,7 @@ interface InvitingServicesProps {
   onDeleteInvite: (inviteId: string) => void;
 }
 
-export default function InvitingServices({
+export default function InvitingServicesList({
   services,
   invites,
   onDeleteInvite,

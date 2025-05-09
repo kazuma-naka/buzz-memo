@@ -4,6 +4,7 @@ import RegisterServiceButton from './_components/RegisterServiceButton';
 import WelcomePage from './welcome/page';
 import RegisteredServiceList from './_components/registerd_service_list/RegisteredServiceList';
 import { fetchServices } from '@/actions/services';
+import InvitingServicesList from './_components/InvitingServicesList';
 
 export default async function Home() {
   const {
