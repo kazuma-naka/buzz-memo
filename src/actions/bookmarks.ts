@@ -170,3 +170,24 @@ export async function insertBookmark(payload: BookmarkPayload) {
   }
   return row;
 }
+
+export async function isBookmarkSaved(params: {
+  userId: string;
+  title: string;
+}): Promise<boolean> {
+  const { userId, title } = params;
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from('bookmarks')
+    .select('id')
+    .eq('last_updated_user_id', userId)
+    .eq('title', title)
+    .maybeSingle();
+
+  if (error) {
+    throw new Error(
+      `[isBookmarkSaved] Supabase query failed: ${error.message}`,
+    );
+  }
+  return !!data;
+}
