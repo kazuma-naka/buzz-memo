@@ -9,7 +9,7 @@ export default function AppDescription() {
   return (
     <section className="mx-auto max-w-5xl px-4 py-20">
       <h2 className="text-center text-3xl font-extrabold tracking-tight md:text-5xl">
-        Buzz Memo で{' '}
+        バズメモで{' '}
         <span className={`text-[#5C8DEC] text-6xl ${mynerve.className}`}>
           Buzz
         </span>{' '}

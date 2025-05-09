@@ -35,7 +35,7 @@ export default async function Home() {
 
   return (
     <div className="bg-[#FAF9F5] min-h-screen flex flex-col">
-      <Header title={'Buzz Memo'} />
+      <Header title={'バズメモ'} />
       <main className="flex-1 flex items-start justify-center pt-12 px-4">
         <div className="w-full max-w-lg bg-white rounded-2xl shadow-lg p-8">
           <section className="space-y-6">
