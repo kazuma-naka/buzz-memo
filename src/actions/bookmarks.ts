@@ -1,6 +1,7 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
+import { BookmarkPayload } from '@/types/bookmarkPayload';
 import type { User } from '@supabase/auth-js';
 import { redirect } from 'next/navigation';
 
@@ -151,4 +152,42 @@ export async function deleteBookmarkByFormData(formData: FormData) {
   const { error } = await supabase.from('bookmarks').delete().eq('id', id);
   if (error) throw new Error(error.message);
   redirect(`/${service}`);
+}
+
+export async function insertBookmark(payload: BookmarkPayload) {
+  const { publish_date, ...rest } = payload;
+  const row = {
+    ...rest,
+    uploaded_date: publish_date ?? new Date().toISOString(),
+  };
+
+  const supabase = await createClient();
+  const { error } = await supabase.from('bookmarks').insert(row);
+  if (error) {
+    throw new Error(
+      `[insertBookmark] Supabase insert failed: ${error.message}`,
+    );
+  }
+  return row;
+}
+
+export async function isBookmarkSaved(params: {
+  userId: string;
+  title: string;
+}): Promise<boolean> {
+  const { userId, title } = params;
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from('bookmarks')
+    .select('id')
+    .eq('last_updated_user_id', userId)
+    .eq('title', title)
+    .maybeSingle();
+
+  if (error) {
+    throw new Error(
+      `[isBookmarkSaved] Supabase query failed: ${error.message}`,
+    );
+  }
+  return !!data;
 }

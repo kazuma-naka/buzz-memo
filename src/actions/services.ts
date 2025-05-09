@@ -74,3 +74,16 @@ export async function registerServiceAction({
 
   revalidatePath('/');
 }
+
+export async function getServicesByUserEmail(email: string) {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from('services')
+    .select('id, title')
+    .eq('user_email', email);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+  return data;
+}

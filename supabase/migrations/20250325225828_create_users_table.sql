@@ -16,7 +16,9 @@ CREATE POLICY "ユーザー自身が自分を取得できる" ON public.users FO
 SELECT
     USING (auth.uid() :: text = id);
 
-CREATE POLICY "認証ユーザーは自分のメールアドレスでユーザー検索可"
+CREATE POLICY "自分のメールアドレスでユーザー検索可"
   ON public.users
   FOR SELECT
-  USING ( auth.uid() IS NOT NULL AND email = current_setting('request.jwt.claims.email') );
+  USING (
+    email = current_setting('request.jwt.claims.email', true)
+  );
