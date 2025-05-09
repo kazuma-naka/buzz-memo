@@ -1,6 +1,7 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
+import { BookmarkPayload } from '@/types/bookmarkPayload';
 import type { User } from '@supabase/auth-js';
 import { redirect } from 'next/navigation';
 
@@ -151,4 +152,21 @@ export async function deleteBookmarkByFormData(formData: FormData) {
   const { error } = await supabase.from('bookmarks').delete().eq('id', id);
   if (error) throw new Error(error.message);
   redirect(`/${service}`);
+}
+
+export async function insertBookmark(payload: BookmarkPayload) {
+  const { publish_date, ...rest } = payload;
+  const row = {
+    ...rest,
+    uploaded_date: publish_date ?? new Date().toISOString(),
+  };
+
+  const supabase = await createClient();
+  const { error } = await supabase.from('bookmarks').insert(row);
+  if (error) {
+    throw new Error(
+      `[insertBookmark] Supabase insert failed: ${error.message}`,
+    );
+  }
+  return row;
 }
