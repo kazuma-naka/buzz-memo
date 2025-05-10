@@ -12,8 +12,17 @@ import {
 import { Paperclip } from 'lucide-react';
 import { ListItemInviteButton } from '@/app/_components/ListItemButton';
 import { sendInviteToUser } from '@/actions/sendInvite';
+import { Service } from '@/types/service';
+import {
+  getInviteListByServiceId,
+  insertInvite,
+} from '@/actions/invites_client';
 
-export default function InviteUserDialog() {
+interface InviteUserDialogProps {
+  service: Service;
+}
+
+export default function InviteUserDialog({ service }: InviteUserDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteToken, setInviteToken] = useState('');
@@ -34,10 +43,21 @@ export default function InviteUserDialog() {
     navigator.clipboard.writeText(inviteUrl);
   };
 
-  const handleCreateMail = () => {
-    const inviteUrl = `${window.location.origin}/invite/${inviteToken}`;
-    sendInviteToUser(inviteEmail, inviteUrl);
-    setIsOpen(false);
+  const handleCreateMail = async () => {
+    try {
+      const inviteUrl = `${window.location.origin}/invite/${inviteToken}`;
+      const inviteList = await getInviteListByServiceId(service.id);
+      if (!inviteList?.id) {
+        console.error('no invite_list found for service', service.id);
+        return;
+      }
+      await insertInvite(inviteList.id, inviteToken, inviteEmail);
+      await sendInviteToUser(inviteEmail, inviteUrl);
+
+      setIsOpen(false);
+    } catch (error) {
+      console.error('failed to create & send invite:', error);
+    }
   };
 
   return (

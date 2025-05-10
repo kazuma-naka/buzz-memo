@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS public.invite (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     invite_list_id UUID NOT NULL,
     invited_user_id TEXT,
+    invited_user_email TEXT,
     token TEXT NOT NULL,
     status INTEGER NOT NULL DEFAULT 0,
     expired_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT (now() + interval '1 day'),
@@ -12,7 +13,6 @@ CREATE TABLE IF NOT EXISTS public.invite (
 );
 
 ALTER TABLE public.invite ENABLE ROW LEVEL SECURITY;
-
 
 CREATE POLICY "招待リスト作成者のみ招待を作成可"
   ON public.invite
@@ -39,18 +39,6 @@ CREATE POLICY "作成者および招待相手のみ閲覧可"
     OR invited_user_id = auth.uid()::text
   );
 
-CREATE POLICY "招待リスト作成者のみ更新可"
-  ON public.invite
-  FOR UPDATE
-  USING (
-    EXISTS (
-      SELECT 1
-      FROM public.invite_lists il
-      WHERE il.id = invite_list_id
-        AND il.created_user_id = auth.uid()::text
-    )
-  );
-
 CREATE POLICY "招待リスト作成者のみ削除可"
   ON public.invite
   FOR DELETE
@@ -61,4 +49,16 @@ CREATE POLICY "招待リスト作成者のみ削除可"
       WHERE il.id = invite_list_id
         AND il.created_user_id = auth.uid()::text
     )
+  );
+
+CREATE POLICY "招待受託者のみ更新可"
+  ON public.invite
+  FOR UPDATE
+  USING (
+    status = 0
+  )
+  WITH CHECK (
+    status = 1
+    AND invited_user_id    = auth.uid()::text
+    AND invited_user_email = auth.jwt() ->> 'email'
   );
