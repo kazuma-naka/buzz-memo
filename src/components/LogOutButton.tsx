@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { createClient } from '@/lib/supabase/client';
 import { useRouter } from 'next/navigation';
 
-const MotionLogOut = motion(LogOut);
+const MotionLogOut = motion.create(LogOut);
 
 export default function LogoutButton() {
   const router = useRouter();

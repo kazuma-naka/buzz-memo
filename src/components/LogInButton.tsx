@@ -4,7 +4,7 @@ import { LogIn } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { createClient } from '@/lib/supabase/client';
 
-const MotionLogIn = motion(LogIn);
+const MotionLogIn = motion.create(LogIn);
 
 export default function LogInButton() {
   const buttonVariants = {
