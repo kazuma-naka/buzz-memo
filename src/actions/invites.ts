@@ -1,3 +1,5 @@
+'use server';
+
 import { createClient } from '@/lib/supabase/server';
 import { InviteWithList } from '@/types/inviteWithList';
 
@@ -18,13 +20,21 @@ export async function getInvites(): Promise<InviteWithList[]> {
 export async function updateInvite(
   userId: string,
   token: string,
+  invitedUserEmail: string,
 ): Promise<boolean> {
   const supabase = await createClient();
   const { error } = await supabase
     .from('invite')
-    .update({ invited_user_id: userId, status: 1 })
+    .update({
+      invited_user_id: userId,
+      invited_user_email: invitedUserEmail,
+      status: 1,
+    })
     .eq('token', token);
-
-  if (error) return false;
+  if (error) {
+    console.log(error);
+    throw error;
+  }
+  console.log(`success ${token} ${userId} ${invitedUserEmail}`);
   return true;
 }

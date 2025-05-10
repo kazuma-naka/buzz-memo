@@ -1,7 +1,7 @@
-import { redirect } from 'next/navigation';
 import { updateInvite } from '@/actions/invites';
 import { createClient } from '@/lib/supabase/server';
 import Header from '@/components/Header';
+import { redirect } from 'next/navigation';
 
 type InvitePageProps = {
   params: Promise<{ token: string }>;
@@ -10,15 +10,18 @@ type InvitePageProps = {
 export default async function InvitePage({ params }: InvitePageProps) {
   const {
     data: { user },
+    error: authError,
   } = await (await createClient()).auth.getUser();
 
-  console.log(
-    `update invite: ${user?.id} ${user?.email} ${(await params).token}`,
-  );
-  if (user?.email) {
-    try {
-      await updateInvite(user.email, (await params).token);
-    } catch (e) {}
+  if (authError) {
+    console.error('auth.getUser() error:', authError);
+  }
+
+  const token = (await params).token;
+  if (user?.id && user.email) {
+    const successfullyInvited = await updateInvite(user.id, token, user.email);
+    if (successfullyInvited) {
+    }
   }
 
   return (
