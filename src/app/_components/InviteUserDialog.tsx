@@ -11,12 +11,9 @@ import {
 } from '@/components/ui/dialog';
 import { Paperclip } from 'lucide-react';
 import { ListItemInviteButton } from '@/app/_components/ListItemButton';
+import { sendInviteToUser } from '@/actions/sendInvite';
 
-interface InviteUserDialogProps {
-  serviceId: string;
-}
-
-export default function InviteUserDialog({ serviceId }: InviteUserDialogProps) {
+export default function InviteUserDialog() {
   const [isOpen, setIsOpen] = useState(false);
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteToken, setInviteToken] = useState('');
@@ -38,14 +35,8 @@ export default function InviteUserDialog({ serviceId }: InviteUserDialogProps) {
   };
 
   const handleCreateMail = () => {
-    console.log(
-      'send invite to',
-      inviteEmail,
-      'with token',
-      inviteToken,
-      'for service',
-      serviceId,
-    );
+    const inviteUrl = `${window.location.origin}/invite/${inviteToken}`;
+    sendInviteToUser(inviteEmail, inviteUrl);
     setIsOpen(false);
   };
 
