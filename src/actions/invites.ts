@@ -23,14 +23,24 @@ export async function updateInvite(
   invitedUserEmail: string,
 ): Promise<boolean> {
   const supabase = await createClient();
-  const { error } = await supabase
+
+  const { data: before } = await supabase
+    .from('invite')
+    .select('id, status, invited_user_id')
+    .eq('token', token);
+  console.log('before', before);
+
+  const { data, error } = await supabase
     .from('invite')
     .update({
       invited_user_id: userId,
       invited_user_email: invitedUserEmail,
       status: 1,
     })
-    .eq('token', token);
+    .eq('token', token)
+    .select();
+
+  console.log({ data, error });
   if (error) {
     console.log(error);
     throw error;
