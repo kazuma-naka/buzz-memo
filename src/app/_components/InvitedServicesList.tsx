@@ -24,17 +24,19 @@ export default async function InvitedServices({
     return <p className="text-gray-500">招待はありません。</p>;
   }
 
-  const serviceIds = Array.from(
-    new Set(
-      invitesPerUser
-        .map((inv) => inv.invite_lists[0]?.service_id)
-        .filter((id): id is string => Boolean(id)),
-    ),
+  const serviceIdSet = new Set(
+    invitesPerUser
+      .map((inv) => inv.invite_lists?.[0]?.service_id)
+      .filter((id): id is string => Boolean(id)),
   );
+
+  if (serviceIdSet.size === 0) {
+    return <p className="text-gray-500">招待はありません。</p>;
+  }
 
   let services: Service[];
   try {
-    services = await fetchServicesByIdList(serviceIds);
+    services = await fetchServicesByIdList([...serviceIdSet]);
   } catch (err: any) {
     return <p className="text-red-600">サービス取得エラー: {err.message}</p>;
   }
