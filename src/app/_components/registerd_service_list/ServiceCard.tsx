@@ -1,11 +1,13 @@
 'use client';
 
 import React from 'react';
+import { redirect } from 'next/navigation';
 import { Card, CardContent } from '@/components/ui/card';
 import { ListItemDeleteButton } from '../ListItemButton';
 import RegisteredServiceTitle from './RegisteredServiceTitle';
 import InviteUserDialog from '@/app/_components/InviteUserDialog';
 import { Service } from '@/types/service';
+import { deleteService } from '@/actions/service_client';
 
 interface ServiceCardProps {
   service: Service;
@@ -13,7 +15,12 @@ interface ServiceCardProps {
 
 export default function ServiceCard({ service }: ServiceCardProps) {
   const handleDelete = () => {
-    console.log('delete', service.id);
+    const confirmedDeleteService = window.confirm(
+      '本当にこのサービスを削除してもよろしいですか？この操作は取り消せません。',
+    );
+    if (!confirmedDeleteService) return;
+    deleteService(service.id);
+    redirect('/');
   };
 
   return (
