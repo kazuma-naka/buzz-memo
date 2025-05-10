@@ -12,9 +12,13 @@ export default async function InvitePage({ params }: InvitePageProps) {
     data: { user },
   } = await (await createClient()).auth.getUser();
 
+  console.log(
+    `update invite: ${user?.id} ${user?.email} ${(await params).token}`,
+  );
   if (user?.email) {
-    updateInvite(user.email, (await params).token);
-    redirect('/');
+    try {
+      await updateInvite(user.email, (await params).token);
+    } catch (e) {}
   }
 
   return (

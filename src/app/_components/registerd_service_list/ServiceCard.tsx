@@ -22,7 +22,7 @@ export default function ServiceCard({ service }: ServiceCardProps) {
         <div className="flex justify-between items-center">
           <RegisteredServiceTitle service={service} />
           <div className="flex gap-4">
-            <InviteUserDialog />
+            <InviteUserDialog service={service} />
             <ListItemDeleteButton
               onClick={handleDelete}
               buttonText="削除する"
