@@ -24,6 +24,7 @@ export async function updateInvite(
     .from('invite')
     .update({ invited_user_id: userId, status: 1 })
     .eq('token', token);
+
   if (error) return false;
   return true;
 }
