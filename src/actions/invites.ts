@@ -15,7 +15,15 @@ export async function getInvites(): Promise<InviteWithList[]> {
   return data;
 }
 
-export async function deleteInvite(inviteId: string) {
+export async function updateInvite(
+  userId: string,
+  token: string,
+): Promise<boolean> {
   const supabase = await createClient();
-  await supabase.from('invite').delete().eq('id', inviteId);
+  const { error } = await supabase
+    .from('invite')
+    .update({ invited_user_id: userId, status: 1 })
+    .eq('token', token);
+  if (error) return false;
+  return true;
 }
