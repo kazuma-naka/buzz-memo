@@ -11,6 +11,7 @@ export async function getInvites(): Promise<InviteWithList[]> {
       status,
       expired_at,
       invited_user_id,
+      invited_user_email,
       invite_lists(service_id, created_user_id)
     `);
   if (error) throw error;

@@ -46,11 +46,15 @@ export default function InvitingServicesList({
                     >
                       <div>
                         <span className="text-sm text-gray-600 mr-2">
-                          ({statusLabels[inv.status] ?? '不明'})
+                          {inv.invited_user_email} (
+                          {statusLabels[inv.status] ?? '不明'})
                         </span>
-                        <span className="text-sm text-gray-500">
-                          {new Date(inv.expired_at).toLocaleString()}
-                        </span>
+                        <div className="text-sm text-gray-500 mt-1">
+                          有効期限:{' '}
+                          {inv.expired_at
+                            ? new Date(inv.expired_at).toLocaleDateString()
+                            : '期限なし'}
+                        </div>
                       </div>
                       <InviteUserDeleteButton
                         buttonText="招待削除"
