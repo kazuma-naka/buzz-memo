@@ -1,13 +1,16 @@
 'use client';
 
 import { createClient } from '@/lib/supabase/client';
+import { usePathname } from 'next/navigation';
 
 const signInWithGoogle = async () => {
+  const pathname = usePathname();
+  const redirectTo =
+    `${window.location.origin}/auth/callback` +
+    `?next=${encodeURIComponent(pathname)}`;
   const { error } = await createClient().auth.signInWithOAuth({
     provider: 'google',
-    options: {
-      redirectTo: 'http://localhost:3000/auth/callback',
-    },
+    options: { redirectTo },
   });
   if (error) console.error('Error signing in:', error);
 };
