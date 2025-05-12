@@ -51,14 +51,30 @@ CREATE POLICY "招待リスト作成者のみ削除可"
     )
   );
 
-CREATE POLICY "招待受託者のみ更新可"
+CREATE POLICY "招待相手はメール一致なら閲覧可"
+  ON public.invite
+  FOR SELECT
+  TO authenticated
+  USING (
+         invited_user_id = auth.uid()::text
+      OR (status = 0
+          AND invited_user_email = auth.jwt() ->> 'email')
+      OR EXISTS (
+          SELECT 1 FROM public.invite_lists il
+          WHERE il.id = invite_list_id
+            AND il.created_user_id = auth.uid()::text)
+  );
+
+CREATE POLICY "招待相手のみ承諾可"
   ON public.invite
   FOR UPDATE
+  TO authenticated
   USING (
-    status = 0
+         status = 0
+     AND invited_user_email = auth.jwt() ->> 'email'
   )
-  WITH CHECK (
-    status = 1
-    AND invited_user_id    = auth.uid()::text
-    AND invited_user_email = auth.jwt() ->> 'email'
+  WITH CHECK (        
+         status = 1
+     AND invited_user_id   = auth.uid()::text
+     AND invited_user_email = auth.jwt() ->> 'email'
   );

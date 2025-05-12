@@ -1,3 +1,4 @@
+// app/_components/InvitedServicesList.tsx
 import { fetchServicesByIdList } from '@/actions/services';
 import { Card, CardContent } from '@/components/ui/card';
 import { InviteWithList } from '@/types/inviteWithList';
@@ -9,7 +10,7 @@ interface InvitedServicesProps {
   userId: string;
 }
 
-export default async function InvitedServices({
+export default async function InvitedServicesList({
   invites,
   userId,
 }: InvitedServicesProps) {
@@ -19,22 +20,29 @@ export default async function InvitedServices({
   const invitesPerUser = invites.filter(
     (inv) => inv.invited_user_id === userId,
   );
-
   if (invitesPerUser.length === 0) {
     return <p className="text-gray-500">招待はありません。</p>;
   }
 
-  const serviceIds = Array.from(
-    new Set(
-      invitesPerUser
-        .map((inv) => inv.invite_lists[0]?.service_id)
-        .filter((id): id is string => Boolean(id)),
-    ),
+  const serviceIdSet = new Set(
+    invitesPerUser.flatMap((inv) => {
+      const lists = Array.isArray(inv.invite_lists)
+        ? inv.invite_lists
+        : inv.invite_lists
+          ? [inv.invite_lists]
+          : [];
+      return lists
+        .map((list) => list.service_id)
+        .filter((id): id is string => Boolean(id));
+    }),
   );
+  if (serviceIdSet.size === 0) {
+    return <p className="text-gray-500">招待はありません。</p>;
+  }
 
   let services: Service[];
   try {
-    services = await fetchServicesByIdList(serviceIds);
+    services = await fetchServicesByIdList([...serviceIdSet]);
   } catch (err: any) {
     return <p className="text-red-600">サービス取得エラー: {err.message}</p>;
   }
@@ -43,37 +51,45 @@ export default async function InvitedServices({
     services.map((svc) => [svc.id, svc]),
   ) as Record<string, Service>;
 
+  const cards = invitesPerUser.flatMap((inv) => {
+    const lists = Array.isArray(inv.invite_lists)
+      ? inv.invite_lists
+      : inv.invite_lists
+        ? [inv.invite_lists]
+        : [];
+
+    return lists.map((list) => {
+      const svc = serviceMap[list.service_id];
+      return (
+        <Card
+          key={`${inv.id}-${list.service_id}`}
+          className="bg-[#FAF9F5] mb-4"
+        >
+          <CardContent>
+            <Link
+              href={`/${svc?.path ?? ''}`}
+              className="text-xl font-semibold hover:underline cursor-pointer mb-2 block"
+            >
+              {svc?.title ?? 'Unknown Service'}
+            </Link>
+            <div className="flex justify-between items-center">
+              <span className="text-sm text-gray-600 mr-2">
+                buzzmemo.jp/{svc?.path}
+              </span>
+            </div>
+          </CardContent>
+        </Card>
+      );
+    });
+  });
+
   return (
     <div>
-      {invitesPerUser.map((inv) => {
-        const listItem = inv.invite_lists[0];
-        if (!listItem) return null;
-
-        const svc = serviceMap[listItem.service_id];
-        return (
-          <Card key={inv.id} className="bg-[#FAF9F5] mb-4">
-            <CardContent>
-              <Link
-                href={`/${svc?.path ?? ''}`}
-                className="text-xl font-semibold hover:underline cursor-pointer mb-2 block"
-              >
-                {svc?.title ?? 'Unknown Service'}
-              </Link>
-
-              <div className="flex justify-between items-center">
-                <div>
-                  <span className="text-sm text-gray-600 mr-2">
-                    ({formatStatus(inv.status)})
-                  </span>
-                  <span className="text-sm text-gray-500">
-                    {new Date(inv.expired_at).toLocaleString()}
-                  </span>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        );
-      })}
+      {cards.length > 0 ? (
+        cards
+      ) : (
+        <p className="text-gray-500">招待はありません。</p>
+      )}
     </div>
   );
 }

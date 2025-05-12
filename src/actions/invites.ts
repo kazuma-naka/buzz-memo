@@ -11,9 +11,11 @@ export async function getInvites(): Promise<InviteWithList[]> {
       status,
       expired_at,
       invited_user_id,
+      invited_user_email,
       invite_lists(service_id, created_user_id)
     `);
   if (error) throw error;
+  console.log(`data: ${data.length} ${data?.[0]?.invite_lists}`);
   return data;
 }
 
@@ -23,18 +25,18 @@ export async function updateInvite(
   invitedUserEmail: string,
 ): Promise<boolean> {
   const supabase = await createClient();
-  const { error } = await supabase
+  const { data, error } = await supabase
     .from('invite')
     .update({
       invited_user_id: userId,
       invited_user_email: invitedUserEmail,
       status: 1,
     })
-    .eq('token', token);
+    .eq('token', token)
+    .select();
   if (error) {
     console.log(error);
     throw error;
   }
-  console.log(`success ${token} ${userId} ${invitedUserEmail}`);
   return true;
 }

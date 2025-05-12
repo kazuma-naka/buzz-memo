@@ -21,6 +21,7 @@ export default async function InvitePage({ params }: InvitePageProps) {
   if (user?.id && user.email) {
     const successfullyInvited = await updateInvite(user.id, token, user.email);
     if (successfullyInvited) {
+      redirect('/');
     }
   }
 

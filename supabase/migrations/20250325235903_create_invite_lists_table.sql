@@ -17,15 +17,9 @@ CREATE POLICY "自分が作成する招待リストのみ挿入可"
   FOR INSERT
   WITH CHECK (auth.uid()::text = created_user_id);
 
-CREATE POLICY "サービス作成者および自分の招待リストのみ選択可"
+CREATE POLICY "全員が選択可能"
   ON public.invite_lists
   FOR SELECT
   USING (
-    EXISTS (
-      SELECT 1
-      FROM public.services s
-      WHERE s.id = service_id
-        AND s.created_user_id = auth.uid()::text
-    )
-    OR created_user_id = auth.uid()::text
+    true
   );
