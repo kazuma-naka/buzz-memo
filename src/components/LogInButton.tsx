@@ -1,5 +1,6 @@
 'use client';
 
+import { usePathname } from 'next/navigation';
 import { LogIn } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { createClient } from '@/lib/supabase/client';
@@ -18,14 +19,16 @@ export default function LogInButton() {
   };
 
   const transition = { type: 'spring' as const, stiffness: 300, damping: 20 };
+  const pathname = usePathname();
 
   const handleLogin = async () => {
+    const redirectTo =
+      `${window.location.origin}/auth/callback` +
+      `?next=${encodeURIComponent(pathname)}`;
     const supabase = createClient();
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
-      options: {
-        redirectTo: 'http://localhost:3000/auth/callback',
-      },
+      options: { redirectTo },
     });
 
     if (error) {

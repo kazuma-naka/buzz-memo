@@ -14,7 +14,7 @@ export async function getInvites(): Promise<InviteWithList[]> {
       invite_lists(service_id, created_user_id)
     `);
   if (error) throw error;
-  console.log(`data: ${data}`);
+  console.log(`data: ${data.length}`);
   return data;
 }
 
