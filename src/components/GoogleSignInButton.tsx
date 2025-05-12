@@ -1,13 +1,10 @@
 'use client';
 
 import { createClient } from '@/lib/supabase/client';
-import { usePathname } from 'next/navigation';
 
 export default function GoogleSignInButton() {
-  const pathname = usePathname();
-
   const signInWithGoogle = async () => {
-    const redirectTo = `${window.location.origin}/auth/callback?next=${encodeURIComponent(pathname)}`;
+    const redirectTo = process.env.OAUTH_REDIRECT_URL!;
     const { error } = await createClient().auth.signInWithOAuth({
       provider: 'google',
       options: { redirectTo },
