@@ -1,7 +1,7 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import { ChevronLeft } from 'lucide-react';
-import router from 'next/router';
 import LogoutButton from './LogOutButton';
 import LogInButton from './LogInButton';
 import MotionLink from './MotionLink';
@@ -17,6 +17,7 @@ export default function HeaderTitle({
   textSize,
   session,
 }: HeaderTitleProps) {
+  const router = useRouter();
   return (
     <header className="bg-[#FAF9F5] shadow-lg">
       <div className="flex justify-between items-center h-16 max-w-xl mx-auto w-full px-4 text-[#222222]">
