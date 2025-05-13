@@ -17,14 +17,24 @@ export default async function ServicePage({ params }: Props) {
   } = await (await createClient()).auth.getUser();
   const service = await fetchServicesByPath(servicePath);
   if (!service) return <div>サービスが見つかりませんでした。</div>;
-  const serviceId = service?.id;
   let idEditable = false;
   let bookmarks: Bookmark[] = [];
-
-  if (serviceId) {
-    idEditable = await isBookmarkEditable(user, serviceId);
-    bookmarks = await fetchBookmarksByService(serviceId);
+  if (!user) {
+    return (
+      <div>
+        <Header title={service.title} />
+        <BookmarkGrid
+          bookmarks={bookmarks}
+          editable={idEditable}
+          servicePath={servicePath}
+        />
+      </div>
+    );
   }
+
+  const serviceId = service.id;
+  idEditable = await isBookmarkEditable(user, serviceId);
+  bookmarks = await fetchBookmarksByService(serviceId);
 
   return (
     <div>
