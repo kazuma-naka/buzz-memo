@@ -6,6 +6,7 @@ import {
   updateBookmarkByFormData,
   deleteBookmarkByFormData,
 } from '@/actions/bookmarks';
+import { Eye, EyeOff } from 'lucide-react';
 
 type Props = {
   initialData: Bookmark;
@@ -16,6 +17,14 @@ export default function EditBookmarkForm({ initialData, service }: Props) {
   const [form, setForm] = useState<Bookmark>(initialData);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, type, checked, value } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [name]: type === 'checkbox' ? checked : value,
+    }));
+  };
 
   return (
     <div className="max-w-xl mx-auto p-6 space-y-6">
@@ -107,19 +116,28 @@ export default function EditBookmarkForm({ initialData, service }: Props) {
           />
         </div>
 
-        <div>
-          <label className="inline-flex items-center">
+        <div className="block">
+          <span className="font-semibold">公開ステータス</span>
+          <label className="flex items-center space-x-2 cursor-pointer text-gray-500 mt-3">
             <input
               type="checkbox"
-              value="true"
               name="is_visible"
+              value="true"
               checked={form.is_visible}
-              onChange={(e) =>
-                setForm((f) => ({ ...f, is_visible: e.target.checked }))
-              }
-              className="mr-2"
+              onChange={handleChange}
+              className="sr-only peer"
             />
-            公開する
+            <EyeOff
+              size={20}
+              className="peer-checked:hidden transition-transform duration-200"
+            />
+            <Eye
+              size={20}
+              className="hidden peer-checked:block transition-transform duration-200"
+            />
+            <span className="select-none">
+              {form.is_visible ? '公開する' : '非公開'}
+            </span>
           </label>
         </div>
       </form>
