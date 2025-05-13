@@ -12,17 +12,13 @@ export async function fetchTagList(bookmarkId: string): Promise<TagListResult> {
     .eq('bookmark_id', bookmarkId)
     .maybeSingle();
   if (listError) throw new Error(listError.message);
-
-  const tagListId =
-    listRow?.id ??
-    (
-      await supabase
-        .from('tag_list')
-        .insert({ bookmark_id: bookmarkId })
-        .select('id')
-        .single()
-    ).data!.id;
-
+  const tagListId = listRow?.id ?? '';
+  if (!listRow?.id) {
+    return {
+      tagListId: '',
+      tags: [],
+    };
+  }
   const { data: tagsData, error: tagsError } = await supabase
     .from('tags')
     .select('tag_text')
