@@ -19,7 +19,7 @@ export default async function ServicePage({ params }: Props) {
   const serviceId = service.id;
   const idEditable = await isBookmarkEditable(user, serviceId);
   const bookmarks = await fetchBookmarksByService(serviceId);
-
+  console.log(`idEditable: ${idEditable}`);
   return (
     <div>
       <Header title={service.title} />
