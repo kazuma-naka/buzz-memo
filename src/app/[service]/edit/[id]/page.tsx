@@ -29,7 +29,9 @@ export default async function EditBookmarkPage({ params }: Params) {
 
   return (
     <div className="mt-4">
-      <h1 className="text-2xl font-semibold mb-4">{bookmark.title}</h1>
+      <h1 className="text-2xl font-semibold mb-4 text-center">
+        {bookmark.title}
+      </h1>
       <EditBookmarkForm initialData={bookmark} service={service} />
     </div>
   );
