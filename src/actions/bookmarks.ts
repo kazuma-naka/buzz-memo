@@ -1,24 +1,14 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
+import { Bookmark } from '@/types/bookmark';
 import { BookmarkPayload } from '@/types/bookmarkPayload';
 import type { User } from '@supabase/auth-js';
 import { redirect } from 'next/navigation';
 
-export async function fetchBookmarksByService(serviceId: string): Promise<
-  {
-    id: string;
-    title: string;
-    last_updated_user_id: string;
-    description: string | null;
-    favicon_url: string | null;
-    twitter_image_url: string | null;
-    uploaded_date: string;
-    is_visible: boolean;
-    memo: string | null;
-    url: string;
-  }[]
-> {
+export async function fetchBookmarksByService(
+  serviceId: string,
+): Promise<Bookmark[]> {
   const supabase = await createClient();
 
   const { data, error } = await supabase
