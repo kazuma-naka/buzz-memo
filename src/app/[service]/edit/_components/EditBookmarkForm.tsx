@@ -129,13 +129,15 @@ export default function EditBookmarkForm({ initialData, service }: Props) {
             />
             <EyeOff
               size={20}
-              className="peer-checked:hidden transition-transform duration-200"
+              className="peer-checked:hidden transition-transform duration-200 text-[#FF6B6B]"
             />
             <Eye
               size={20}
               className="hidden peer-checked:block transition-transform duration-200"
             />
-            <span className="select-none">
+            <span
+              className={`select-none ${!form.is_visible ? 'text-[#FF6B6B]' : ''}`}
+            >
               {form.is_visible ? '公開する' : '非公開'}
             </span>
           </label>
