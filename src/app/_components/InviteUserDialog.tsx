@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import {
   Dialog,
   DialogContent,
@@ -9,7 +10,8 @@ import {
   DialogDescription,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Paperclip } from 'lucide-react';
+import { Paperclip, Loader2 } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { ListItemInviteButton } from '@/app/_components/ListItemButton';
 import { sendInviteToUser } from '@/actions/sendInvite';
 import { Service } from '@/types/service';
@@ -27,9 +29,17 @@ export default function InviteUserDialog({ service }: InviteUserDialogProps) {
   const [inviteEmail, setInviteEmail] = useState('');
   const [inviteToken, setInviteToken] = useState('');
   const [inviteUrl, setInviteUrl] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   const isEmailValid = (email: string) =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+  const clearForm = () => {
+    setInviteEmail('');
+    setInviteToken('');
+    setInviteUrl('');
+  };
 
   const handleOpen = () => {
     const token = Math.random().toString().slice(2);
@@ -44,19 +54,26 @@ export default function InviteUserDialog({ service }: InviteUserDialogProps) {
   };
 
   const handleCreateMail = async () => {
+    if (!isEmailValid(inviteEmail)) return;
+    setIsLoading(true);
     try {
-      const inviteUrl = `${window.location.origin}/invite/${inviteToken}`;
+      const url = `${window.location.origin}/invite/${inviteToken}`;
       const inviteList = await getInviteListByServiceId(service.id);
       if (!inviteList?.id) {
         console.error('no invite_list found for service', service.id);
         return;
       }
       await insertInvite(inviteList.id, inviteToken, inviteEmail);
-      await sendInviteToUser(inviteEmail, inviteUrl);
+      await sendInviteToUser(inviteEmail, url);
 
       setIsOpen(false);
+      clearForm();
+
+      router.refresh();
     } catch (error) {
       console.error('failed to create & send invite:', error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -64,11 +81,7 @@ export default function InviteUserDialog({ service }: InviteUserDialogProps) {
     <Dialog
       open={isOpen}
       onOpenChange={(open) => {
-        if (!open) {
-          setInviteEmail('');
-          setInviteToken('');
-          setInviteUrl('');
-        }
+        if (!open) clearForm();
         setIsOpen(open);
       }}
     >
@@ -90,24 +103,36 @@ export default function InviteUserDialog({ service }: InviteUserDialogProps) {
             value={inviteEmail}
             onChange={(e) => setInviteEmail(e.target.value)}
             className="w-full px-3 py-2 border rounded"
+            disabled={isLoading}
           />
           {inviteEmail && !isEmailValid(inviteEmail) && (
             <p className="text-sm text-red-500">
               有効なメールアドレスを入力してください
             </p>
           )}
-          <button
+          <motion.button
             onClick={handleCreateMail}
-            disabled={!inviteEmail || !isEmailValid(inviteEmail)}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded disabled:bg-gray-400"
+            disabled={!inviteEmail || !isEmailValid(inviteEmail) || isLoading}
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded disabled:bg-gray-400 flex items-center justify-center space-x-2"
+            whileHover={{ scale: 1.03 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 20 }}
           >
-            招待する
-          </button>
+            {isLoading ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin" />
+                <span>送信中…</span>
+              </>
+            ) : (
+              <span>招待する</span>
+            )}
+          </motion.button>
           <div className="mt-2 flex justify-end">
             <button
               type="button"
               onClick={handleCopyUrl}
               className="flex items-center space-x-1 text-sm text-gray-600 hover:text-gray-800"
+              disabled={isLoading}
             >
               <Paperclip className="w-4 h-4" />
               <span>リンクをコピー</span>
