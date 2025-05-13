@@ -10,7 +10,7 @@
         "tabs"
     ],
     "host_permissions": [
-        "http://localhost:3000/*"
+        "https://buzz-memo.vercel.app/*"
     ],
     "oauth2": {
         "client_id": "834143776226-a0dsfjnd79ehgbb7e8r5km6u7ls5v9ib.apps.googleusercontent.com",

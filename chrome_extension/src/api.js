@@ -1,4 +1,4 @@
-const API_BASE = 'http://localhost:3000';
+const API_BASE = 'https://buzz-memo.vercel.app/';
 export default class Api {
   constructor(base = API_BASE) {
     this.base = base;
