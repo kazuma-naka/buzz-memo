@@ -10,6 +10,9 @@ import { InviteWithList } from '@/types/inviteWithList';
 import { BookmarkCheck, UserCheck, UserPlus } from 'lucide-react';
 import InvitedServices from './_components/InvitedServicesList';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default async function Home() {
   const {
     data: { user },
