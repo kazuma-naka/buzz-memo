@@ -1,6 +1,7 @@
 import { fetchBookmarkByBookmarkId } from '@/actions/bookmarks';
 import EditBookmarkForm from '../_components/EditBookmarkForm';
 import { Bookmark } from '@/types/bookmark';
+import Header from '@/components/Header';
 
 type Params = {
   params: Promise<{
@@ -29,6 +30,7 @@ export default async function EditBookmarkPage({ params }: Params) {
 
   return (
     <div className="mt-4">
+      <Header />
       <h1 className="text-2xl font-semibold mb-4 text-center">
         {bookmark.title}
       </h1>
