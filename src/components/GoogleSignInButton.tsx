@@ -4,7 +4,7 @@ import { createClient } from '@/lib/supabase/client';
 
 export default function GoogleSignInButton() {
   const signInWithGoogle = async () => {
-    const redirectTo = `${window.location.origin}/auth/callback`;
+    const redirectTo = process.env.OAUTH_REDIRECT_URL!;
     const { error } = await createClient().auth.signInWithOAuth({
       provider: 'google',
       options: { redirectTo },
