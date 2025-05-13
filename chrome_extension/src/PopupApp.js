@@ -42,21 +42,51 @@ export default class PopupApp {
     const [{ result }] = await chrome.scripting.executeScript({
       target: { tabId: this.tabId },
       func: () => {
+        const trySelector = (query, attr = 'content') => {
+          const el = document.querySelector(query);
+          if (!el) return null;
+          return attr === 'text'
+            ? el.textContent.trim()
+            : el.getAttribute(attr);
+        };
+
+        const dateCandidates = [
+          () => trySelector("meta[property='article:published_time']"),
+          () => trySelector("meta[property='og:published_time']"),
+          () => trySelector("meta[itemprop='datePublished']"),
+          () => trySelector("meta[name='date']"),
+          () => trySelector("meta[name='pubdate']"),
+          () => trySelector("meta[name='DC.date.issued']"),
+          () => trySelector('time[datetime]', 'datetime'),
+          () => trySelector('time.published', 'datetime'),
+          () => trySelector('.post-date', 'text'),
+          () => trySelector('.entry-date', 'text'),
+          () => trySelector('.publish-date', 'text'),
+          () => trySelector('relative-time', 'datetime'),
+          () => {
+            const txt = document.querySelector('.posted')?.textContent;
+            return txt?.match(/\d{4}-\d{2}-\d{2}/)?.[0] ?? null;
+          },
+        ];
+
+        const raw = dateCandidates
+          .map((fn) => fn())
+          .find((val) => Boolean(val));
+        const publish_date = raw
+          ? new Date(raw).toISOString()
+          : new Date().toISOString();
+
         const sel = (n, a = 'name') =>
           document.querySelector(`meta[${a}="${n}"]`)?.content;
-        const firstIcon = [...document.querySelectorAll('link[rel*="icon"]')][0]
-          ?.href;
-        const published =
-          sel('article:published_time', 'property') ||
-          sel('og:published_time', 'property') ||
-          document.querySelector('time[datetime]')?.dateTime ||
-          new Date().toISOString();
+        const firstIcon =
+          document.querySelectorAll('link[rel*="icon"]')[0]?.href;
+
         return {
           title: document.title,
           description: sel('description'),
           favicon_url: firstIcon,
           twitter_image_url: sel('twitter:image'),
-          publish_date: published,
+          publish_date,
         };
       },
     });
