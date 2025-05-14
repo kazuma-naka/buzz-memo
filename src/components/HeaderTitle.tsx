@@ -8,13 +8,11 @@ import MotionLink from './MotionLink';
 
 interface HeaderTitleProps {
   displayTitle: string;
-  textSize: string;
   session: boolean;
 }
 
 export default function HeaderTitle({
   displayTitle,
-  textSize,
   session,
 }: HeaderTitleProps) {
   const router = useRouter();
@@ -24,7 +22,7 @@ export default function HeaderTitle({
         {displayTitle !== '' ? (
           <MotionLink
             href="/"
-            className={`${textSize} font-bold bg-[linear-gradient(90deg,#0D47A1,#1976D2,#42A5F5,#64B5F6,#0D47A1)]
+            className={`text-base sm:text-lg md:text-2xl font-bold bg-[linear-gradient(90deg,#0D47A1,#1976D2,#42A5F5,#64B5F6,#0D47A1)]
         bg-[length:200%_200%]
         bg-clip-text text-transparent
         select-none
