@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { Github } from 'lucide-react';
+import { SiGithub } from 'react-icons/si';
 
 export default function Footer() {
   return (
@@ -20,7 +20,7 @@ export default function Footer() {
           rel="noopener noreferrer"
           className="hover:text-gray-700 transition-colors"
         >
-          <Github size={24} />
+          <SiGithub size={24} />
         </a>
       </div>
       <div>&copy; {new Date().getFullYear()} Buzz Memo</div>
