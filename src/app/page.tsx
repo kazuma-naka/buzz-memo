@@ -9,6 +9,7 @@ import InvitingServicesList from './_components/InvitingServicesList';
 import { InviteWithList } from '@/types/inviteWithList';
 import { BookmarkCheck, UserCheck, UserPlus } from 'lucide-react';
 import InvitedServices from './_components/InvitedServicesList';
+import Footer from '@/components/Footer';
 
 export default async function Home() {
   const {
@@ -66,6 +67,7 @@ export default async function Home() {
           </section>
         </div>
       </main>
+      <Footer />
     </div>
   );
 }
