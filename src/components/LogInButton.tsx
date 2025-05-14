@@ -48,6 +48,7 @@ export default function LogInButton() {
         flex items-center gap-2
         text-blue-600 hover:text-blue-800
         text-md font-medium cursor-pointer
+         text-base sm:text-sm md:text-md
       "
       variants={buttonVariants}
       initial="rest"
