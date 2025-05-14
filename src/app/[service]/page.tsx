@@ -4,6 +4,7 @@ import { isBookmarkEditable } from '@/actions/bookmarks';
 import { createClient } from '@/lib/supabase/server';
 import BookmarkGrid from './_components/BookmarkGrid';
 import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 type Props = {
   params: Promise<{ service: string }>;
@@ -28,6 +29,7 @@ export default async function ServicePage({ params }: Props) {
         editable={idEditable}
         servicePath={servicePath}
       />
+      <Footer />
     </div>
   );
 }
