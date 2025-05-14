@@ -1,4 +1,3 @@
-// TermsPage.tsx — Part 1 of 3
 import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 
