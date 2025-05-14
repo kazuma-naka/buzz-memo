@@ -26,9 +26,11 @@ export default function ServiceCard({ service }: ServiceCardProps) {
   return (
     <Card className="bg-[#FAF9F5]">
       <CardContent>
-        <div className="flex justify-between items-center">
-          <RegisteredServiceTitle service={service} />
-          <div className="flex gap-4">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
+          <div className="w-full">
+            <RegisteredServiceTitle service={service} />
+          </div>
+          <div className="mt-4 sm:mt-0 flex gap-4">
             <InviteUserDialog service={service} />
             <ListItemDeleteButton
               onClick={handleDelete}
