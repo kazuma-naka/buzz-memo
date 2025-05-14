@@ -27,7 +27,7 @@ export default function EditBookmarkForm({ initialData, service }: Props) {
   };
 
   return (
-    <div className="max-w-xl mx-auto p-6 space-y-6">
+    <div className="max-w-xl mx-auto p-6 space-y-6 mb-6">
       <form
         id="updateForm"
         action={updateBookmarkByFormData}

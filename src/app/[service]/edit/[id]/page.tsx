@@ -2,6 +2,7 @@ import { fetchBookmarkByBookmarkId } from '@/actions/bookmarks';
 import EditBookmarkForm from '../_components/EditBookmarkForm';
 import { Bookmark } from '@/types/bookmark';
 import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 type Params = {
   params: Promise<{
@@ -35,6 +36,7 @@ export default async function EditBookmarkPage({ params }: Params) {
         {bookmark.title}
       </h1>
       <EditBookmarkForm initialData={bookmark} service={service} />
+      <Footer />
     </div>
   );
 }
