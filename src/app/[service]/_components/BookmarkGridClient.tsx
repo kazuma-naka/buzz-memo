@@ -38,20 +38,22 @@ export default function BookmarkGridClient({
 
   return (
     <div className="mx-auto max-w-screen-xl px-4">
-      <div className="mt-6 mb-4 flex justify-center">
-        <select
-          value={selectedTag}
-          onChange={(e) => setSelectedTag(e.target.value)}
-          className="p-2 border rounded-md bg-white shadow-sm"
-        >
-          <option value="ALL">全て</option>
-          {tags.map((tag) => (
-            <option key={tag} value={tag}>
-              {tag}
-            </option>
-          ))}
-        </select>
-      </div>
+      {editable && (
+        <div className="mt-6 mb-4 flex justify-center">
+          <select
+            value={selectedTag}
+            onChange={(e) => setSelectedTag(e.target.value)}
+            className="p-2 border rounded-md bg-white shadow-sm"
+          >
+            <option value="ALL">全て</option>
+            {tags.map((tag) => (
+              <option key={tag} value={tag}>
+                {tag}
+              </option>
+            ))}
+          </select>
+        </div>
+      )}
 
       <div className="space-y-12 mt-10">
         {Object.entries(grouped).map(([ym, bms]) => (
