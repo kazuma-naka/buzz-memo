@@ -12,22 +12,15 @@ import {
 import { Bookmark } from '@/types/bookmark';
 import MotionCard from '@/components/MotionCard';
 import { toggleBookmarkVisibility } from '@/actions/bookmarks';
-import { fetchTagList, addTag, removeTag } from '@/actions/tagList';
 import { Badge } from '@/components/ui/badge';
 import { VisibilityToggle } from './icons/VisibilityToggleIcon';
 import { EditBookmarkButton } from './icons/EditBookmarkButton';
-import TagIcon from './tag/TagIcon';
-import MemoIcon from './memo/MemoIcon';
-import TagDialog from './tag/TagDialog';
-import { saveBookmarkMemo } from '@/actions/bookmarks';
-import MemoDialog from './memo/MemoDialog';
 
 interface Props {
   bookmark: Bookmark;
   editable?: boolean;
   servicePath?: string;
   initialTags: string[];
-  initialTagListId: string;
 }
 
 export const BookmarkCard: React.FC<Props> = ({
@@ -35,7 +28,6 @@ export const BookmarkCard: React.FC<Props> = ({
   editable = false,
   servicePath = '',
   initialTags,
-  initialTagListId,
 }) => {
   const [isVisible, setIsVisible] = useState(bookmark.is_visible);
   const toggleVisibility = async () => {
@@ -48,61 +40,7 @@ export const BookmarkCard: React.FC<Props> = ({
     }
   };
 
-  const [tags, setTags] = useState<string[]>(initialTags);
-  const [tagListId, setTagListId] = useState<string>(initialTagListId);
-  const [newTag, setNewTag] = useState('');
-  const [isTagOpen, setIsTagOpen] = useState(false);
-
-  const handleTagIconClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIsTagOpen(true);
-    fetchTagList(bookmark.id)
-      .then(({ tagListId, tags }) => {
-        setTagListId(tagListId);
-        setTags(tags);
-      })
-      .catch((err) => console.error(err));
-  };
-
-  const handleAdd = async () => {
-    if (!newTag.trim()) return;
-    await addTag(tagListId, newTag.trim());
-    setTags((tag) => [...tag, newTag.trim()]);
-    setNewTag('');
-  };
-
-  const handleRemove = async (tag: string) => {
-    await removeTag(tagListId, tag);
-    setTags((t) => t.filter((x) => x !== tag));
-  };
-
-  const rawMemo = bookmark.memo ?? '';
-  let parsedMemo: string;
-  try {
-    parsedMemo = JSON.parse(rawMemo);
-  } catch {
-    parsedMemo = rawMemo;
-  }
-
-  const [memo, setMemo] = useState<string>(parsedMemo);
-  const [editedMemo, setEditedMemo] = useState<string>(memo);
-  const [isMemoOpen, setIsMemoOpen] = useState<boolean>(false);
-
-  const handleMemoIconClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setEditedMemo(memo);
-    setIsMemoOpen(true);
-  };
-
-  const handleSaveMemo = async () => {
-    if (editedMemo.trim() === memo.trim()) {
-      setIsMemoOpen(false);
-      return;
-    }
-    await saveBookmarkMemo(bookmark.id, JSON.stringify(editedMemo));
-    setMemo(editedMemo);
-    setIsMemoOpen(false);
-  };
+  const [tags] = useState<string[]>(initialTags);
 
   const editHref = `/${servicePath}/edit/${bookmark.id}`;
   const dateOnly = bookmark.uploaded_date.slice(0, 10);
@@ -223,39 +161,6 @@ export const BookmarkCard: React.FC<Props> = ({
           </div>
         </MotionCard>
       </motion.div>
-
-      {isTagOpen && (
-        <div
-          onClick={() => setIsTagOpen(false)}
-          className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md bg-black/20"
-        >
-          <TagDialog
-            tags={tags}
-            newTag={newTag}
-            editable={editable}
-            onTagChange={setNewTag}
-            onAddTag={handleAdd}
-            onRemoveTag={handleRemove}
-            onClose={() => setIsTagOpen(false)}
-          />
-        </div>
-      )}
-
-      {isMemoOpen && (
-        <div
-          onClick={() => setIsMemoOpen(false)}
-          className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-md bg-black/20"
-        >
-          <MemoDialog
-            originalMemo={memo}
-            editedMemo={editedMemo}
-            editable={editable}
-            onChange={setEditedMemo}
-            onSave={handleSaveMemo}
-            onClose={() => setIsMemoOpen(false)}
-          />
-        </div>
-      )}
     </>
   );
 };

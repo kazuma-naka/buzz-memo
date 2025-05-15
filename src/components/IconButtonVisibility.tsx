@@ -24,7 +24,7 @@ interface IconButtonProps {
   className?: string;
 }
 
-export default function IconButton({
+export default function IconButtonVisibility({
   children,
   tooltip,
   ariaLabel,
@@ -52,7 +52,7 @@ export default function IconButton({
       className={`
         ${className}
         relative flex items-center justify-center
-        w-22 h-11 p-1 rounded-full bg-white hover:bg-gray-200
+        w-11 h-11 p-1 rounded-full bg-white hover:bg-gray-200
         group
       `}
     >
