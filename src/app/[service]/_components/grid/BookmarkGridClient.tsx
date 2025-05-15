@@ -69,7 +69,6 @@ export default function BookmarkGridClient({
                   editable={editable}
                   servicePath={servicePath}
                   initialTags={bookmarkTagDataMap[bk.id].tags}
-                  initialTagListId={bookmarkTagDataMap[bk.id].tagListId}
                 />
               ))}
             </div>
