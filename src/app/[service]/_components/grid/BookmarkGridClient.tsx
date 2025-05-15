@@ -3,9 +3,9 @@
 import React, { useState } from 'react';
 import { sortBookmarksByDate, groupBookmarksByYearMonth } from '@/lib/bookmark';
 import { Bookmark } from '@/types/bookmark';
-import { YearMonthCard } from './YearMonthCard';
-import { BookmarkCard } from './BookmarkCard';
-import EmptyBookmark from './EmptyBookmark';
+import { YearMonthCard } from '../YearMonthCard';
+import { BookmarkCard } from '../BookmarkCard';
+import EmptyBookmark from '../EmptyBookmark';
 
 type Props = {
   bookmarks: Bookmark[];
