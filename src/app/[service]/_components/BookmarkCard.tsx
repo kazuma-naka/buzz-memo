@@ -78,7 +78,7 @@ export const BookmarkCard: React.FC<Props> = ({
           style={{ borderStyle: 'solid', backgroundColor: '#FAF9F5' }}
         >
           {editable && (
-            <div className="absolute top-2 right-2 z-20 flex items-center space-x-2 gap-4 mr-4">
+            <div className="absolute top-2 right-2 z-20 flex items-center space-x-2 gap-4 mr-4 ">
               <EditBookmarkButton editHref={editHref} />
             </div>
           )}
@@ -87,7 +87,7 @@ export const BookmarkCard: React.FC<Props> = ({
             <CardHeader
               className={
                 'flex items-center justify-between p-4 ' +
-                (editable ? 'mt-6' : '')
+                (editable ? 'mt-10' : '')
               }
             >
               <div className="flex items-center space-x-2">
