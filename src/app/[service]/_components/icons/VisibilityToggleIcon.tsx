@@ -19,6 +19,8 @@ export function VisibilityToggle({ isVisible, onToggle }: Props) {
       ariaLabel={isVisible ? '表示する' : '非表示にする'}
       tooltip={isVisible ? '表示' : '非表示'}
       onClick={onToggle}
+      width="10"
+      height="10"
     >
       {isVisible ? <Eye className="w-7 h-7" /> : <EyeOff className="w-7 h-7" />}
     </IconButton>

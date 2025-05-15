@@ -22,6 +22,8 @@ interface IconButtonProps {
   ariaLabel: string;
   onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   className?: string;
+  width: string;
+  height: string;
 }
 
 export default function IconButton({
@@ -30,6 +32,8 @@ export default function IconButton({
   ariaLabel,
   onClick,
   className = '',
+  width,
+  height,
 }: IconButtonProps) {
   const [popped, setPopped] = useState(false);
 
@@ -52,7 +56,7 @@ export default function IconButton({
       className={`
         ${className}
         relative flex items-center justify-center
-        w-9 h-9 p-1 rounded-full bg-white hover:bg-gray-200
+        w-${width} h-${height} p-1 rounded-full bg-white hover:bg-gray-200
         group
       `}
     >

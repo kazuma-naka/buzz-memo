@@ -16,6 +16,8 @@ export function EditBookmarkButton({ editHref }: Props) {
       ariaLabel="編集する"
       tooltip="編集する"
       onClick={() => router.push(editHref)}
+      width="20"
+      height="11"
     >
       <Edit className="w-6 h-6 text-gray-600" />
     </IconButton>
