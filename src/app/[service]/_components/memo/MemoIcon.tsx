@@ -10,7 +10,13 @@ interface Props {
 
 export default function MemoIcon({ onClick }: Props) {
   return (
-    <IconButton ariaLabel="メモを編集" tooltip="メモを編集" onClick={onClick}>
+    <IconButton
+      ariaLabel="メモを編集"
+      tooltip="メモを編集"
+      onClick={onClick}
+      width="8"
+      height="8"
+    >
       <FileText className="w-6 h-6 text-gray-600" />
     </IconButton>
   );
