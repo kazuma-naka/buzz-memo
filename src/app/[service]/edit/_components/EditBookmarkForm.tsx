@@ -7,16 +7,24 @@ import {
   deleteBookmarkByFormData,
 } from '@/actions/bookmarks';
 import { Eye, EyeOff } from 'lucide-react';
+import { TagListResult } from '@/types/TagListResult';
 
 type Props = {
   initialData: Bookmark;
+  initialTags: TagListResult;
   service: string;
 };
 
-export default function EditBookmarkForm({ initialData, service }: Props) {
+export default function EditBookmarkForm({
+  initialData,
+  initialTags,
+  service,
+}: Props) {
   const [form, setForm] = useState<Bookmark>(initialData);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [tags, setTags] = useState<string[]>(initialTags.tags ?? []);
+  const [newTag, setNewTag] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, type, checked, value } = e.target;
@@ -25,6 +33,17 @@ export default function EditBookmarkForm({ initialData, service }: Props) {
       [name]: type === 'checkbox' ? checked : value,
     }));
   };
+
+  const handleAddTag = () => {
+    const t = newTag.trim();
+    if (t && !tags.includes(t)) {
+      setTags((prev) => [...prev, t]);
+      setNewTag('');
+    }
+  };
+
+  const handleRemoveTag = (tag: string) =>
+    setTags((prev) => prev.filter((t) => t !== tag));
 
   return (
     <div className="max-w-xl mx-auto p-6 space-y-6 mb-6">
@@ -142,6 +161,52 @@ export default function EditBookmarkForm({ initialData, service }: Props) {
             </span>
           </label>
         </div>
+
+        <div>
+          <label className="block mb-1 font-semibold">タグ</label>
+          <div className="mb-2 flex items-center space-x-2">
+            <input
+              type="text"
+              value={newTag}
+              onChange={(e) => setNewTag(e.target.value)}
+              placeholder="タグを追加"
+              className="flex-1 p-2 border rounded-md"
+            />
+            <button
+              type="button"
+              onClick={handleAddTag}
+              className="px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+            >
+              追加
+            </button>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {tags.length > 0 ? (
+              tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="inline-flex items-center bg-gray-200 rounded-full"
+                >
+                  <span className="px-2 py-1">{tag}</span>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveTag(tag)}
+                    className="p-1 hover:bg-gray-300 rounded-full"
+                    aria-label={`${tag} を削除`}
+                  >
+                    ×
+                  </button>
+                </span>
+              ))
+            ) : (
+              <p className="text-sm text-gray-500">まだタグがありません</p>
+            )}
+          </div>
+        </div>
+
+        {tags.map((tag) => (
+          <input key={tag} type="hidden" name="tags" value={tag} />
+        ))}
       </form>
 
       <div className="flex justify-end gap-4">

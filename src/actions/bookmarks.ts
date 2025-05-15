@@ -117,6 +117,50 @@ export async function updateBookmarkByFormData(formData: FormData) {
   const memo = formData.get('memo') as string;
   const is_visible = formData.get('is_visible') === 'true';
 
+  const newTags = formData
+    .getAll('tags')
+    .map((t) => (t as string).trim())
+    .filter(Boolean);
+
+  const { data: listRow, error: listError } = await supabase
+    .from('tag_list')
+    .select('id')
+    .eq('bookmark_id', id)
+    .maybeSingle();
+  if (listError) throw new Error(listError.message);
+
+  const tagListId = listRow?.id;
+  if (tagListId) {
+    const { data: existingData, error: existingError } = await supabase
+      .from('tags')
+      .select('tag_text')
+      .eq('tag_list_id', tagListId);
+    if (existingError) throw new Error(existingError.message);
+
+    const existingTags = existingData.map((r) => r.tag_text);
+
+    const toAdd = newTags.filter((t) => !existingTags.includes(t));
+    const toRemove = existingTags.filter((t) => !newTags.includes(t));
+
+    if (toAdd.length > 0) {
+      const { error: addErr } = await supabase
+        .from('tags')
+        .insert(
+          toAdd.map((tag) => ({ tag_list_id: tagListId, tag_text: tag })),
+        );
+      if (addErr) throw new Error(addErr.message);
+    }
+
+    if (toRemove.length > 0) {
+      const { error: delErr } = await supabase
+        .from('tags')
+        .delete()
+        .eq('tag_list_id', tagListId)
+        .in('tag_text', toRemove);
+      if (delErr) throw new Error(delErr.message);
+    }
+  }
+
   const { error } = await supabase
     .from('bookmarks')
     .update({
