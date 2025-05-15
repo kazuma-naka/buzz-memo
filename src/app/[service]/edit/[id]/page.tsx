@@ -3,6 +3,7 @@ import EditBookmarkForm from '../_components/EditBookmarkForm';
 import { Bookmark } from '@/types/bookmark';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { fetchTagList } from '@/actions/tagList';
 
 type Params = {
   params: Promise<{
@@ -29,13 +30,19 @@ export default async function EditBookmarkPage({ params }: Params) {
     );
   }
 
+  const tags = await fetchTagList(bookmark.id);
+
   return (
     <div>
       <Header />
       <h1 className="text-2xl font-semibold mt-6 mb-4 text-center">
         {bookmark.title}
       </h1>
-      <EditBookmarkForm initialData={bookmark} service={service} />
+      <EditBookmarkForm
+        initialData={bookmark}
+        initialTags={tags}
+        service={service}
+      />
       <Footer />
     </div>
   );
