@@ -10,7 +10,13 @@ interface Props {
 
 export default function TagIcon({ onClick }: Props) {
   return (
-    <IconButton ariaLabel="タグを編集" tooltip="タグを編集" onClick={onClick}>
+    <IconButton
+      ariaLabel="タグを編集"
+      tooltip="タグを編集"
+      onClick={onClick}
+      width="20"
+      height="12"
+    >
       <Tag className="w-6 h-6 text-gray-600" />
     </IconButton>
   );

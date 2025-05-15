@@ -142,12 +142,6 @@ export const BookmarkCard: React.FC<Props> = ({
           {editable && (
             <div className="absolute top-2 right-2 z-20 flex items-center space-x-2 gap-4 mr-4">
               <EditBookmarkButton editHref={editHref} />
-              <MemoIcon onClick={handleMemoIconClick} />
-              <TagIcon onClick={handleTagIconClick} />
-              <VisibilityToggle
-                isVisible={isVisible}
-                onToggle={toggleVisibility}
-              />
             </div>
           )}
 
@@ -203,6 +197,15 @@ export const BookmarkCard: React.FC<Props> = ({
               >
                 {dateOnly}
               </time>
+
+              {editable && (
+                <div>
+                  <VisibilityToggle
+                    isVisible={isVisible}
+                    onToggle={toggleVisibility}
+                  />
+                </div>
+              )}
             </CardFooter>
 
             {tags.length > 0 && (
