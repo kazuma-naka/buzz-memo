@@ -4,7 +4,7 @@ import { SiGithub } from 'react-icons/si';
 
 export default function Footer() {
   return (
-    <footer className="py-6 text-center text-xl text-gray-500 bg-white">
+    <footer className="py-6 text-center text-xl text-gray-500 bg-white mt-8">
       <div className="mb-4 flex justify-center items-center space-x-2">
         <Link href="/terms" className="underline">
           利用規約
