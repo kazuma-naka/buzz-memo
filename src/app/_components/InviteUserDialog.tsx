@@ -93,7 +93,7 @@ export default function InviteUserDialog({ service }: InviteUserDialogProps) {
           <DialogTitle>ユーザーを招待する</DialogTitle>
           <DialogDescription>招待メールを作成します</DialogDescription>
         </DialogHeader>
-        <div className="px-4 py-4 space-y-4">
+        <div className="py-4 space-y-4">
           <label className="block text-sm font-medium text-gray-700">
             招待先メールアドレス
           </label>
@@ -135,7 +135,7 @@ export default function InviteUserDialog({ service }: InviteUserDialogProps) {
               disabled={isLoading}
             >
               <Paperclip className="w-4 h-4" />
-              <span>リンクをコピー</span>
+              <span>招待リンクをコピー</span>
             </button>
           </div>
         </div>
