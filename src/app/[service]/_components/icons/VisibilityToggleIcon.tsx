@@ -19,7 +19,11 @@ export function VisibilityToggle({ isVisible, onToggle }: Props) {
       tooltip={isVisible ? '表示' : '非表示'}
       onClick={onToggle}
     >
-      {isVisible ? <Eye className="w-7 h-7" /> : <EyeOff className="w-7 h-7" />}
+      {isVisible ? (
+        <Eye className="w-7 h-7" />
+      ) : (
+        <EyeOff className="w-7 h-7 opacity-50" />
+      )}
     </IconButtonVisibility>
   );
 }
