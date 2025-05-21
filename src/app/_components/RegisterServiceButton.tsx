@@ -75,7 +75,6 @@ export default function RegisterServiceButton({
               });
               onRegistered?.();
               setOpen(false);
-              // clear fields for next time
               setServiceName('');
               setServiceUrl('');
             } catch (err: any) {
@@ -96,7 +95,7 @@ export default function RegisterServiceButton({
             </DialogDescription>
           </DialogHeader>
 
-          <div className="flex flex-col gap-4 px-4">
+          <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-1">
               <Label htmlFor="serviceName" className="mb-2">
                 サービス名
